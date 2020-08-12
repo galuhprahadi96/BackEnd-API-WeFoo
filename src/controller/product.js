@@ -3,6 +3,7 @@ const {
   getAllProduct,
   getProductById,
   postProduct,
+  putProduct,
   deleteProduct,
 } = require("../model/product");
 
@@ -56,6 +57,38 @@ module.exports = {
       };
       const result = await postProduct(setData);
       return helper.response(res, 201, "Product Created", result);
+    } catch (error) {
+      return helper.response(res, 400, "Bad Request", error);
+    }
+  },
+
+  // method update data
+
+  putProduct: async (req, res) => {
+    try {
+      const id = req.params.id;
+      const {
+        id_category,
+        product_name,
+        product_image,
+        product_price,
+        status,
+      } = req.body;
+      const setData = {
+        id_category,
+        product_name,
+        product_image,
+        product_price,
+        product_update_at: new Date(),
+        status,
+      };
+      const checkId = await getProductById(id);
+      if (checkId.length > 0) {
+        const result = await putProduct(setData, id);
+        return helper.response(res, 201, "Product Updated", result);
+      } else {
+        return helper.response(res, 404, `Product By Id : ${id} Not Found`);
+      }
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
     }
