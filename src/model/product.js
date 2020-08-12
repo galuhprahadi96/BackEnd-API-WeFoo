@@ -22,4 +22,25 @@ module.exports = {
       );
     });
   },
+
+  // input data product
+  postProduct: (setData) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "INSERT INTO product SET ?",
+        setData,
+        (error, result) => {
+          if (!error) {
+            const newResult = {
+              product_id: result.insertId,
+              ...setData,
+            };
+            resolve(newResult);
+          } else {
+            reject(new Error(error));
+          }
+        }
+      );
+    });
+  },
 };
