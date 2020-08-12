@@ -1,11 +1,9 @@
 const route = require("express").Router();
 
-// import route disini
+// import route
 const product = require("./routes/product");
-// const category = ....
 
-// buat middle disini
+// middle
 route.use("/product", product);
-// route.use('/category', product)
 
 module.exports = route;
