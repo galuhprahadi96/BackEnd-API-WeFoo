@@ -3,10 +3,12 @@ const {
   getAllProduct,
   getProductById,
   postProduct,
+  deleteProduct,
 } = require("../model/product");
 
 // import helper
 const helper = require("../helper/index.js");
+const { request } = require("express");
 
 module.exports = {
   // method ambil data product
@@ -42,7 +44,6 @@ module.exports = {
         product_name,
         product_image,
         product_price,
-        product_created_at,
         status,
       } = req.body;
       const setData = {
@@ -55,6 +56,22 @@ module.exports = {
       };
       const result = await postProduct(setData);
       return helper.response(res, 201, "Product Created", result);
+    } catch (error) {
+      return helper.response(res, 400, "Bad Request", error);
+    }
+  },
+
+  // method delete product
+  deleteProduct: async (req, res) => {
+    try {
+      const id = req.params.id;
+      const checkId = await getProductById(id);
+      if (checkId > 0) {
+        const result = await deleteProduct(id);
+        return helper.response(res, 201, "Product Deleted", result);
+      } else {
+        return helper.response(res, 404, `Product by id : ${id} not found`);
+      }
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
     }

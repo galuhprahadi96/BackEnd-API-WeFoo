@@ -3,6 +3,7 @@ const {
   getAllProduct,
   getProductById,
   postProduct,
+  deleteProduct,
 } = require("../controller/product");
 
 // GET
@@ -11,5 +12,8 @@ route.get("/:id", getProductById);
 
 // POST
 route.post("/", postProduct);
+
+// DELETE
+route.delete("/:id", deleteProduct);
 
 module.exports = route;
