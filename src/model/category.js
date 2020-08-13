@@ -43,4 +43,26 @@ module.exports = {
       );
     });
   },
+
+  // update category
+  patchCategory: (setData, id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "UPDATE category SET ? WHERE category_id = ?",
+        [setData, id],
+        (error, result) => {
+          if (!error) {
+            const newResult = {
+              category_id: id,
+              ...setData,
+            };
+            // console.log(newResult);
+            resolve(newResult);
+          } else {
+            reject(new Error(error));
+          }
+        }
+      );
+    });
+  },
 };
