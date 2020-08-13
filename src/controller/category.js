@@ -4,6 +4,7 @@ const {
   getCategoryById,
   postCategory,
   patchCategory,
+  deleteCategory,
 } = require("../model/category");
 
 // import helper
@@ -68,6 +69,22 @@ module.exports = {
         return helper.response(res, 201, "Category Updated", result);
       } else {
         return helper.response(res, 404, `Category Id : ${id} Not Found`);
+      }
+    } catch (error) {
+      return helper.response(res, 400, "Bad Request", error);
+    }
+  },
+
+  // Delete data category
+  deleteCategory: async (req, res) => {
+    try {
+      const id = req.params.id;
+      const checkId = await getCategoryById(id);
+      if (checkId.length > 0) {
+        const result = await deleteCategory(id);
+        return helper.response(res, 201, "Category Deleted", result);
+      } else {
+        return helper.response(res, 404, `Category id : ${id} not found`);
       }
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);

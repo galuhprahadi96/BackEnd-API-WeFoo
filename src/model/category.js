@@ -65,4 +65,25 @@ module.exports = {
       );
     });
   },
+
+  // delete data category
+
+  deleteCategory: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "DELETE FROM category WHERE category_id = ?",
+        id,
+        (error, result) => {
+          if (!error) {
+            const newResult = {
+              id: id,
+            };
+            resolve(newResult);
+          } else {
+            reject(new Error(error));
+          }
+        }
+      );
+    });
+  },
 };
