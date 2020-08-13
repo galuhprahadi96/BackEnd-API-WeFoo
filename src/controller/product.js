@@ -99,7 +99,7 @@ module.exports = {
     try {
       const id = req.params.id;
       const checkId = await getProductById(id);
-      if (checkId > 0) {
+      if (checkId.length > 0) {
         const result = await deleteProduct(id);
         return helper.response(res, 201, "Product Deleted", result);
       } else {
