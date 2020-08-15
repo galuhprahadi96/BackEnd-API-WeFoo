@@ -1,5 +1,6 @@
 // import data model product
 const {
+  sortName,
   getSearchProduct,
   getProduct,
   getProductCount,
@@ -43,10 +44,10 @@ const getNextLink = (page, totalPage, currentQuery) => {
 module.exports = {
   // method ambil data product
   getAllProduct: async (req, res) => {
-    let { page = 0, limit = 2 } = req.query;
-    console.log(page);
+    let { page, limit, name, sort } = req.query;
     page = parseInt(page);
     limit = parseInt(limit);
+
     let totalData = await getProductCount();
     let totalPage = Math.ceil(totalData / limit);
     let offset = page * limit - limit;
@@ -61,11 +62,19 @@ module.exports = {
       nextLink: nextLink && `http://127.0.0.1:3001/product?${nextLink}`,
     };
     try {
-      const result = await getProduct(limit, offset);
-      return helper.response(res, 200, "Success Get Product", [
-        result,
-        pageInfo,
-      ]);
+      if (name) {
+        const result = await getProduct(limit, offset, name, sort);
+        return helper.response(res, 200, `Success Get Product and sort`, [
+          result,
+          pageInfo,
+        ]);
+      } else {
+        const result = await getProduct(limit, offset);
+        return helper.response(res, 200, "Success Get Product", [
+          result,
+          pageInfo,
+        ]);
+      }
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
     }
@@ -168,7 +177,7 @@ module.exports = {
       let totalData = await getProductCount();
       const searchInfo = {
         Find: result.length,
-        From: totalData,
+        "Total Data": totalData,
       };
 
       if (result.length > 0) {
