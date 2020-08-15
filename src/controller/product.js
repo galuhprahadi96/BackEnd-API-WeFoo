@@ -1,22 +1,71 @@
 // import data model product
 const {
-  getAllProduct,
+  getSearchProduct,
+  getProduct,
+  getProductCount,
   getProductById,
   postProduct,
   putProduct,
   deleteProduct,
 } = require("../model/product");
 
+const qs = require("querystring");
 // import helper
 const helper = require("../helper/index.js");
 const { request } = require("express");
 
+// logic prevlink pagination
+const getPrevLink = (page, currentQuery) => {
+  if (page > 1) {
+    const generatedPage = {
+      page: page - 1,
+    };
+    const resultPrevLink = { ...currentQuery, ...generatedPage };
+    return qs.stringify(resultPrevLink);
+  } else {
+    return null;
+  }
+};
+
+const getNextLink = (page, totalPage, currentQuery) => {
+  if (page < totalPage) {
+    const generatedPage = {
+      page: page + 1,
+    };
+    const resultNextLink = { ...currentQuery, ...generatedPage };
+    return qs.stringify(resultNextLink);
+  } else {
+    return null;
+  }
+};
+// end logic pagination
+
 module.exports = {
   // method ambil data product
   getAllProduct: async (req, res) => {
+    let { page = 0, limit = 2 } = req.query;
+    console.log(page);
+    page = parseInt(page);
+    limit = parseInt(limit);
+    let totalData = await getProductCount();
+    let totalPage = Math.ceil(totalData / limit);
+    let offset = page * limit - limit;
+    let prevLink = getPrevLink(page, req.query);
+    let nextLink = getNextLink(page, totalPage, req.query);
+    const pageInfo = {
+      page, // page: page
+      totalPage,
+      limit,
+      totalData,
+      prevLink: prevLink && `http://127.0.0.1:3001/product?${prevLink}`,
+      nextLink: nextLink && `http://127.0.0.1:3001/product?${nextLink}`,
+    };
     try {
-      const result = await getAllProduct();
-      return helper.response(res, 200, "Success Get Product", result);
+      const result = await getProduct(limit, offset);
+      return helper.response(res, 200, "Success Get Product", [
+        result,
+        pageInfo,
+      ]);
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
     }
@@ -104,6 +153,31 @@ module.exports = {
         return helper.response(res, 201, "Product Deleted", result);
       } else {
         return helper.response(res, 404, `Product by id : ${id} not found`);
+      }
+    } catch (error) {
+      return helper.response(res, 400, "Bad Request", error);
+    }
+  },
+
+  // method search name
+  getSearchProduct: async (req, res) => {
+    try {
+      const { keyword } = req.query;
+
+      const result = await getSearchProduct(keyword);
+      let totalData = await getProductCount();
+      const searchInfo = {
+        Find: result.length,
+        From: totalData,
+      };
+
+      if (result.length > 0) {
+        return helper.response(res, 200, `Data found ${searchInfo.Find}`, [
+          result,
+          searchInfo,
+        ]);
+      } else {
+        return helper.response(res, 404, `Product ${keyword} not found`);
       }
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);

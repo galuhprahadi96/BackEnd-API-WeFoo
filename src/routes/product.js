@@ -1,5 +1,6 @@
 const route = require("express").Router();
 const {
+  getSearchProduct,
   getAllProduct,
   getProductById,
   postProduct,
@@ -7,6 +8,8 @@ const {
   deleteProduct,
 } = require("../controller/product");
 
+// Search by name
+route.get("/search", getSearchProduct);
 // GET
 route.get("/", getAllProduct);
 route.get("/:id", getProductById);

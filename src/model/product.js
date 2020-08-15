@@ -2,10 +2,34 @@ const connection = require("../config/mysql");
 
 module.exports = {
   // ambil semua data product
-  getAllProduct: () => {
+  getProduct: (limit, offset) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT product_id, category_name, product_name, product_image, status, product_created_at, product_update_at FROM product INNER JOIN category ON product.id_category=category.category_id`,
+        "SELECT product_id, category_name, product_name, product_image, status, product_created_at, product_update_at FROM product INNER JOIN category ON product.id_category=category.category_id ORDER BY product.product_name ASC LIMIT ? OFFSET ? ",
+        [limit, offset],
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error));
+        }
+      );
+    });
+  },
+  // hitung jumlah data
+  getProductCount: () => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "SELECT COUNT(*) as total FROM product",
+        (error, result) => {
+          !error ? resolve(result[0].total) : reject(new Error(error));
+        }
+      );
+    });
+  },
+
+  // cari data product by name
+  getSearchProduct: (keyword) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT product_id, category_name, product_name, product_image, status, product_created_at, product_update_at FROM product INNER JOIN category ON product.id_category=category.category_id WHERE product_name LIKE '%${keyword}%' ORDER BY product_name ASC`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error));
         }
