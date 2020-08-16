@@ -1,8 +1,9 @@
 const route = require("express").Router();
 
-const { getHistoryById } = require("../controller/history");
+const { getAllHistory, getHistoryById } = require("../controller/history");
 
-// POST
+// GET
+route.get("/", getAllHistory);
 route.get("/:id", getHistoryById);
 
 module.exports = route;

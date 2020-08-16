@@ -1,6 +1,18 @@
 const connection = require("../config/mysql");
 
 module.exports = {
+  // ambil data history
+  getAllHistory: () => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "SELECT * FROM history ORDER BY history_created_at DESC",
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error));
+        }
+      );
+    });
+  },
+
   // ambil history by id
   getHistoryById: (id) => {
     return new Promise((resolve, reject) => {
@@ -9,6 +21,18 @@ module.exports = {
         id,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error));
+        }
+      );
+    });
+  },
+
+  // hitung jumlah data
+  countHistory: () => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "SELECT COUNT(*) as total FROM history",
+        (error, result) => {
+          !error ? resolve(result[0].total) : reject(new Error(error));
         }
       );
     });
