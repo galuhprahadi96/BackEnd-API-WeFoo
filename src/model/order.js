@@ -1,13 +1,14 @@
 const connection = require("../config/mysql");
 
 module.exports = {
+  // ambil data harga
   getHarga: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        "SELECT product_name, product_price FROM order_product LEFT JOIN product ON order_product.product_id=product.product_id WHERE product.product_id = ?",
-        id,
+        `SELECT product_price FROM product WHERE product_id = ${id}`,
         (error, result) => {
-          !error ? resolve(result) : reject(new Error(error));
+          let newResult = JSON.parse(JSON.stringify(result));
+          !error ? resolve(newResult) : reject(new Error(error));
         }
       );
     });
@@ -26,6 +27,7 @@ module.exports = {
     });
   },
 
+  // post order
   postOrder: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -34,8 +36,7 @@ module.exports = {
         (error, result) => {
           if (!error) {
             const newResult = {
-              category_id: result.insertId,
-              ...setData,
+              id_order: result.insertId,
             };
             resolve(newResult);
           } else {

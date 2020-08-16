@@ -23,7 +23,29 @@ module.exports = {
         (error, result) => {
           if (!error) {
             const newResult = {
-              id_history: result.insertId,
+              history_id: result.insertId,
+              ...setData,
+            };
+            resolve(newResult);
+          } else {
+            reject(new Error(error));
+          }
+        }
+      );
+    });
+  },
+
+  // update
+  patchHistory: (setData, id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `UPDATE history SET ? WHERE history_id = ?`,
+        [setData, id],
+        (error, result) => {
+          if (!error) {
+            const newResult = {
+              history_id: id,
+              ...setData,
             };
             resolve(newResult);
           } else {
