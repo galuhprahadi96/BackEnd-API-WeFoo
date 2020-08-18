@@ -40,14 +40,19 @@ module.exports = {
   // input data category
   postCategory: async (req, res) => {
     try {
-      const { category_name } = req.body;
+       const { category_name } = req.body;
       const setData = {
         category_name,
         category_created_at: new Date(),
       };
-      const result = await postCategory(setData);
-      // console.log(result);
-      return helper.response(res, 201, "Category Created", result);
+      // error handling category
+      if (category_name === "") {
+        return helper.response(res, 201, `values has insert`);
+      } else {
+        const result = await postCategory(setData);
+        // console.log(result);
+        return helper.response(res, 201, "Category Created", result);
+      }
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
     }
@@ -65,8 +70,13 @@ module.exports = {
       };
       const checkId = await getCategoryById(id);
       if (checkId.length > 0) {
-        const result = await patchCategory(setData, id);
-        return helper.response(res, 201, "Category Updated", result);
+         // error handling category
+          if (category_name === "") {
+            return helper.response(res, 201, `values has insert`);
+          } else {
+            const result = await patchCategory(setData, id);
+            return helper.response(res, 201, "Category Updated", result)
+          }
       } else {
         return helper.response(res, 404, `Category Id : ${id} Not Found`);
       }
