@@ -94,7 +94,7 @@ module.exports = {
   // method input data
   postProduct: async (req, res) => {
     try {
-      const {
+     const {
         id_category,
         product_name,
         product_image,
@@ -109,8 +109,13 @@ module.exports = {
         product_created_at: new Date(),
         status,
       };
-      const result = await postProduct(setData);
-      return helper.response(res, 201, "Product Created", result);
+
+      if (id_category == "" || product_name == "" || product_image == "" || product_price == "" || status == "" ){
+          return helper.response(res, 201, `values has insert`);
+      }else{
+        const result = await postProduct(setData);
+        return helper.response(res, 201, "Product Created", result);
+      }
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
     }
@@ -128,6 +133,7 @@ module.exports = {
         product_price,
         status,
       } = req.body;
+    
       const setData = {
         id_category,
         product_name,
@@ -138,8 +144,12 @@ module.exports = {
       };
       const checkId = await getProductById(id);
       if (checkId.length > 0) {
-        const result = await putProduct(setData, id);
-        return helper.response(res, 201, "Product Updated", result);
+        if (id_category == "" || product_name == "" || product_image == "" || product_price == "" || status == "" ){
+          return helper.response(res, 201, `values has insert`);
+        }else{
+          const result = await putProduct(setData, id);
+          return helper.response(res, 201, "Product Updated", result);
+        }
       } else {
         return helper.response(res, 404, `Product By Id : ${id} Not Found`);
       }
