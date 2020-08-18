@@ -45,36 +45,32 @@ module.exports = {
   // method ambil data product
   getAllProduct: async (req, res) => {
     let { page, limit, name, sort } = req.query;
-    page = parseInt(page);
-    limit = parseInt(limit);
+    let pageNumber = page === undefined ? 1 : page 
+    let limitItem = limit === undefined ? 4 : limit
+    let nameSort = name === undefined ? "product_name" : name
+    let sortBy = sort === undefined ? "ASC" : sort
+    pageNumber = parseInt(pageNumber);
+    limitItem = parseInt(limitItem);
 
     let totalData = await getProductCount();
-    let totalPage = Math.ceil(totalData / limit);
-    let offset = page * limit - limit;
-    let prevLink = getPrevLink(page, req.query);
-    let nextLink = getNextLink(page, totalPage, req.query);
+    let totalPage = Math.ceil(totalData / limitItem);
+    let offset = pageNumber * limitItem - limitItem;
+    let prevLink = getPrevLink(pageNumber, req.query);
+    let nextLink = getNextLink(pageNumber, totalPage, req.query);
     const pageInfo = {
-      page, // page: page
+      pageNumber, // page: page
       totalPage,
-      limit,
+      limitItem,
       totalData,
       prevLink: prevLink && `http://127.0.0.1:3001/product?${prevLink}`,
       nextLink: nextLink && `http://127.0.0.1:3001/product?${nextLink}`,
     };
     try {
-      if (name) {
-        const result = await getProduct(limit, offset, name, sort);
-        return helper.response(res, 200, `Success Get Product and sort`, [
+        const result = await getProduct(limitItem, offset, nameSort, sortBy);
+        return helper.response(res, 200, `Success Get Product`, [
           result,
           pageInfo,
         ]);
-      } else {
-        const result = await getProduct(limit, offset);
-        return helper.response(res, 200, "Success Get Product", [
-          result,
-          pageInfo,
-        ]);
-      }
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
     }
