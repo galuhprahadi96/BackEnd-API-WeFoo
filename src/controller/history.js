@@ -16,7 +16,7 @@ module.exports = {
       const result = await getAllHistory();
       let totalData = await countHistory();
       data = {
-        Total: totalData,
+        TotalOrder: totalData,
       };
       return helper.response(res, 200, "Success Get history", [result, data]);
     } catch (error) {
@@ -31,7 +31,7 @@ module.exports = {
       const history = await getHistoryById(id);
       const orders = await getOrderById(id);
       const result = [{ ...history[0], orders }];
-      return helper.response(res, 200, `Success Get ${id}`, result);
+      return helper.response(res, 200, `Success Get history id ${id}`, result);
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
     }
