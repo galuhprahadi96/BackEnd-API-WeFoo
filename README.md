@@ -30,10 +30,17 @@
 Open .env file on your favorite code editor, and copy paste this code below :
 
 ```
-DB_HOST=localhost // Database host
-DB_USER=root // Database Username
-DB_PASS= // Database Password
-DB_NAME=online_shop // Your Database Name
+* DATABASE
+
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=
+DB_DATABASE=pos_food
+
+* PORT AND IP ADDRESS
+
+IP_ADDRESS=127.0.0.1
+PORT=3001
 ```
 
 ## End Point
