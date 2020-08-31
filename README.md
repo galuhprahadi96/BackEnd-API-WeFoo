@@ -55,13 +55,13 @@ PORT=3001
 **2. POST**
 
 - `/product` (Post product)
-  - `{ "product_name": "Tacos", "category_id": 2, "product_harga": 85000 , "product_status" : 1 | 0}`
+  - `{ "product_name": "Tacos", "category_id": 2, "product_price": 85000 , "status" : 1 | 0}`
 
 **3. PATCH**
 
 - `/product/:id` (Update product by id)
 
-  - `{"product_name" : "Tequila", "category_id" : 1, "product_harga" : 186000, "product_status" : 1 | 0}`
+  - `{"product_name" : "Tequila", "category_id" : 1, "product_price" : 186000, "status" : 1 | 0}`
 
 **4. DELETE**
 
