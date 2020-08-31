@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Aug 16, 2020 at 05:26 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.4.2
+-- Host: 127.0.0.1
+-- Waktu pembuatan: 31 Agu 2020 pada 10.26
+-- Versi server: 10.1.38-MariaDB
+-- Versi PHP: 7.3.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,55 +19,60 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `pos_food`
+-- Database: `gi-pos`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `category`
+-- Struktur dari tabel `category`
 --
 
 CREATE TABLE `category` (
   `category_id` int(11) NOT NULL,
   `category_name` varchar(50) NOT NULL,
-  `category_created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `category_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `category_update_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `category`
+-- Dumping data untuk tabel `category`
 --
 
 INSERT INTO `category` (`category_id`, `category_name`, `category_created_at`, `category_update_at`) VALUES
 (1, 'Food', '2020-08-12 11:22:55', '0000-00-00 00:00:00'),
-(3, 'Drinks', '2020-08-15 13:51:26', '2020-08-15 13:51:26');
+(3, 'Drinks', '2020-08-29 03:30:09', '2020-08-29 03:30:08');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `history`
+-- Struktur dari tabel `history`
 --
 
 CREATE TABLE `history` (
   `history_id` int(11) NOT NULL,
   `invoice` int(11) NOT NULL,
-  `subtotal` int(11) NOT NULL DEFAULT 0,
-  `history_created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `subtotal` int(11) NOT NULL DEFAULT '0',
+  `history_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `history`
+-- Dumping data untuk tabel `history`
 --
 
 INSERT INTO `history` (`history_id`, `invoice`, `subtotal`, `history_created_at`) VALUES
-(58, 867685, 213400, '2020-08-16 12:56:27'),
-(59, 343461, 137500, '2020-08-16 12:59:36');
+(91, 220646, 107800, '2020-08-25 17:00:00'),
+(92, 100532, 5500, '2020-08-21 02:09:18'),
+(93, 536661, 165000, '2020-08-31 02:49:04'),
+(94, 818722, 9900, '2020-08-31 05:01:18'),
+(95, 427143, 165000, '2020-08-31 06:11:37'),
+(96, 622448, 13200, '2020-08-31 06:27:53'),
+(97, 648100, 66000, '2020-08-31 06:33:51');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order_product`
+-- Struktur dari tabel `order_product`
 --
 
 CREATE TABLE `order_product` (
@@ -75,23 +80,32 @@ CREATE TABLE `order_product` (
   `history_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `order_qty` int(11) NOT NULL,
-  `order_total` int(11) NOT NULL DEFAULT 0
+  `order_total` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `order_product`
+-- Dumping data untuk tabel `order_product`
 --
 
 INSERT INTO `order_product` (`order_id`, `history_id`, `product_id`, `order_qty`, `order_total`) VALUES
-(109, 58, 1, 2, 56000),
-(110, 58, 3, 2, 138000),
-(111, 59, 1, 2, 56000),
-(112, 59, 3, 1, 69000);
+(59, 91, 10, 1, 60000),
+(60, 91, 7, 1, 33000),
+(61, 91, 6, 1, 5000),
+(62, 92, 6, 1, 5000),
+(63, 93, 10, 2, 120000),
+(64, 93, 9, 1, 30000),
+(65, 94, 15, 2, 4000),
+(66, 94, 6, 1, 5000),
+(67, 95, 9, 1, 30000),
+(68, 95, 10, 2, 120000),
+(69, 96, 16, 2, 10000),
+(70, 96, 15, 1, 2000),
+(71, 97, 10, 1, 60000);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product`
+-- Struktur dari tabel `product`
 --
 
 CREATE TABLE `product` (
@@ -100,77 +114,82 @@ CREATE TABLE `product` (
   `product_name` varchar(100) NOT NULL,
   `product_image` varchar(100) NOT NULL,
   `product_price` int(11) NOT NULL,
-  `product_created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `product_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `product_update_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `status` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `product`
+-- Dumping data untuk tabel `product`
 --
 
 INSERT INTO `product` (`product_id`, `id_category`, `product_name`, `product_image`, `product_price`, `product_created_at`, `product_update_at`, `status`) VALUES
-(1, 2, 'Choco Rhum rum', 'rum.png', 28000, '2020-08-15 13:45:27', '2020-08-15 13:45:27', 0),
-(3, 1, 'Wiener Schnitzel', 'wiener.png', 69000, '2020-08-12 13:11:42', '0000-00-00 00:00:00', 1),
-(6, 2, 'sepatu', 'sepatu.jpg', 12000, '2020-08-14 08:33:42', '0000-00-00 00:00:00', 1),
-(7, 1, 'salmon', 'salmon.png', 10000, '2020-08-15 01:08:27', '0000-00-00 00:00:00', 1),
-(8, 1, 'salmon', 'salmon.png', 10000, '2020-08-15 13:44:53', '0000-00-00 00:00:00', 1);
+(1, 3, 'Espresso', 'espresso.png', 10000, '2020-08-28 04:33:02', '2020-08-15 13:45:27', 1),
+(3, 3, 'Coffe Latte', 'coffe_latte.png', 15000, '2020-08-28 04:33:36', '2020-08-28 04:31:14', 0),
+(6, 3, 'Cappucino', 'cappucino.png', 5000, '2020-08-28 04:49:15', '2020-08-28 04:49:15', 1),
+(7, 1, 'Red Velvet Latte', 'velvet.png', 33000, '2020-08-23 12:00:26', '0000-00-00 00:00:00', 1),
+(10, 1, 'Chicken Katsu Dabu-dabu', 'chicken_katsu.png', 60000, '2020-08-28 04:47:25', '2020-08-28 04:34:29', 1),
+(11, 1, 'Salmon Truffle Teriyaki', 'salmon.png', 10000, '2020-08-28 04:49:45', '2020-08-28 04:49:45', 1),
+(12, 1, 'Wiener Schnitzel', 'wiener_schnitzel.png', 69000, '2020-08-28 04:49:28', '2020-08-28 04:49:28', 1),
+(15, 1, 'Pisang Goreng', 'pisanggoreng', 2000, '2020-08-31 04:02:47', '0000-00-00 00:00:00', 1),
+(16, 1, 'Mineral water', 'mineral', 5000, '2020-08-31 05:06:38', '0000-00-00 00:00:00', 1),
+(17, 3, 'choco vanilla', 'terserah', 10000, '2020-08-31 06:30:06', '0000-00-00 00:00:00', 1);
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `category`
+-- Indeks untuk tabel `category`
 --
 ALTER TABLE `category`
   ADD PRIMARY KEY (`category_id`);
 
 --
--- Indexes for table `history`
+-- Indeks untuk tabel `history`
 --
 ALTER TABLE `history`
   ADD PRIMARY KEY (`history_id`);
 
 --
--- Indexes for table `order_product`
+-- Indeks untuk tabel `order_product`
 --
 ALTER TABLE `order_product`
   ADD PRIMARY KEY (`order_id`);
 
 --
--- Indexes for table `product`
+-- Indeks untuk tabel `product`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`product_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `category`
+-- AUTO_INCREMENT untuk tabel `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `history`
+-- AUTO_INCREMENT untuk tabel `history`
 --
 ALTER TABLE `history`
-  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
--- AUTO_INCREMENT for table `order_product`
+-- AUTO_INCREMENT untuk tabel `order_product`
 --
 ALTER TABLE `order_product`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
--- AUTO_INCREMENT for table `product`
+-- AUTO_INCREMENT untuk tabel `product`
 --
 ALTER TABLE `product`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
