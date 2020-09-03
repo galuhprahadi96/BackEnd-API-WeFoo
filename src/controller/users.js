@@ -26,8 +26,8 @@ module.exports = {
             user_name,
             user_email,
             user_password: encryptPassword,
-            user_role: 1,
-            user_status: 1,
+            user_role: 2,
+            user_status: 0,
             user_created_at: new Date(),
           };
 
@@ -55,33 +55,38 @@ module.exports = {
       const checkDataUser = await checkUser(user_email);
       // cekdata
       if (checkDataUser.length >= 1) {
-        //cek pass
-        const checkPassword = bcrypt.compareSync(
-          user_password,
-          checkDataUser[0].user_password
-        );
-        //jika benar
-        if (checkPassword) {
-          const {
-            user_id,
-            user_email,
-            user_name,
-            user_role,
-            user_status,
-          } = checkDataUser[0];
-          let payload = {
-            user_id,
-            user_email,
-            user_name,
-            user_role,
-            user_status,
-          };
-          const token = jwt.sign(payload, "RAHASIA", { expiresIn: "24h" });
-          payload = { ...payload, token };
-
-          return helper.response(response, 200, "Success login", payload);
-        } else {
-          return helper.response(response, 400, "Wrong Password");
+        // cek status
+        if (checkDataUser[0].user_status  == 1) {
+          //cek pass
+          const checkPassword = bcrypt.compareSync(
+            user_password,
+            checkDataUser[0].user_password
+          );
+          //jika benar
+          if (checkPassword) {
+            const {
+              user_id,
+              user_email,
+              user_name,
+              user_role,
+              user_status,
+            } = checkDataUser[0];
+            let payload = {
+              user_id,
+              user_email,
+              user_name,
+              user_role,
+              user_status,
+            };
+            const token = jwt.sign(payload, "RAHASIA", { expiresIn: "24h" });
+            payload = { ...payload, token };
+  
+            return helper.response(response, 200, "Success login", payload);
+          } else {
+            return helper.response(response, 400, "Wrong Password");
+          }
+        }else{
+          return helper.response(response, 400, "user not Active");
         }
       } else {
         return helper.response(response, 400, "Email not Registered");
