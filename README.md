@@ -35,7 +35,7 @@ Open .env file on your favorite code editor, and copy paste this code below :
 DB_HOST=localhost
 DB_USER=root
 DB_PASS=
-DB_DATABASE=pos_food
+DB_DATABASE=gi-pos
 
 * PORT AND IP ADDRESS
 
