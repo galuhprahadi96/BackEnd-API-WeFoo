@@ -1,9 +1,9 @@
 const route = require("express").Router();
 const { postOrder } = require("../controller/order");
 
-const { authorization } = require("../middleware/Auth");
+const { authAll } = require("../middleware/Auth");
 
 // POST
-route.post("/", authorization, postOrder);
+route.post("/", authAll, postOrder);
 
 module.exports = route;

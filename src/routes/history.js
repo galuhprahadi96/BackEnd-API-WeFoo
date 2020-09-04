@@ -8,11 +8,13 @@ const {
   getTotalOrderDay,
 } = require("../controller/history");
 
+const { authAll } = require("../middleware/Auth");
+
 // GET
-route.get("/", getAllHistory);
-route.get("/count", getHistoryOrder);
-route.get("/total", getTotalPrice);
-route.get("/income", getTotalOrderDay);
-route.get("/:id", getHistoryById);
+route.get("/", authAll, getAllHistory);
+route.get("/count", authAll, getHistoryOrder);
+route.get("/total", authAll, getTotalPrice);
+route.get("/income", authAll, getTotalOrderDay);
+route.get("/:id", authAll, getHistoryById);
 
 module.exports = route;

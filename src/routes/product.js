@@ -8,7 +8,7 @@ const {
   deleteProduct,
 } = require("../controller/product");
 
-const { authorization } = require("../middleware/Auth");
+const { authAll, authAdmin } = require("../middleware/Auth");
 const {
   clearDataProductRedis,
   getProductRedis,
@@ -16,18 +16,18 @@ const {
 } = require("../middleware/Redis");
 
 // Search by name
-route.get("/search", authorization, getSearchProduct);
+route.get("/search", authAll, getSearchProduct);
 // GET
-route.get("/", authorization, getProductRedis, getAllProduct);
-route.get("/:id", authorization, getProductByIdRedis, getProductById);
+route.get("/", authAll, getProductRedis, getAllProduct);
+route.get("/:id", authAll, getProductByIdRedis, getProductById);
 
 // POST
-route.post("/", authorization, clearDataProductRedis, postProduct);
+route.post("/", authAdmin, clearDataProductRedis, postProduct);
 
 // PUT
-route.put("/:id", authorization, clearDataProductRedis, putProduct);
+route.put("/:id", authAdmin, clearDataProductRedis, putProduct);
 
 // DELETE
-route.delete("/:id", authorization, clearDataProductRedis, deleteProduct);
+route.delete("/:id", authAdmin, clearDataProductRedis, deleteProduct);
 
 module.exports = route;
