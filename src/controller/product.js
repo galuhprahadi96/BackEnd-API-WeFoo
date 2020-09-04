@@ -13,7 +13,9 @@ const {
 const qs = require("querystring");
 // import helper
 const helper = require("../helper/index.js");
-const { request } = require("express");
+// import redis
+const redis = require("redis");
+const client = redis.createClient();
 
 // logic prevlink pagination
 const getPrevLink = (page, currentQuery) => {
@@ -45,10 +47,10 @@ module.exports = {
   // method ambil data product
   getAllProduct: async (req, res) => {
     let { page, limit, name, sort } = req.query;
-    let pageNumber = page === undefined ? 1 : page 
-    let limitItem = limit === undefined ? 4 : limit
-    let nameSort = name === undefined ? "product_name" : name
-    let sortBy = sort === undefined ? "ASC" : sort
+    let pageNumber = page === undefined ? 1 : page;
+    let limitItem = limit === undefined ? 6 : limit;
+    let nameSort = name === undefined ? "product_name" : name;
+    let sortBy = sort === undefined ? "ASC" : sort;
     pageNumber = parseInt(pageNumber);
     limitItem = parseInt(limitItem);
 
@@ -66,11 +68,22 @@ module.exports = {
       nextLink: nextLink && `http://127.0.0.1:3001/product?${nextLink}`,
     };
     try {
-        const result = await getProduct(limitItem, offset, nameSort, sortBy);
-        return helper.response(res, 200, `Success Get Product`, [
-          result,
-          pageInfo,
-        ]);
+      const result = await getProduct(limitItem, offset, nameSort, sortBy);
+      // simpan ke redis
+      let newData = {
+        result,
+        pageInfo,
+      };
+
+      client.set(
+        `getproduct:${JSON.stringify(req.query)}`,
+        JSON.stringify(newData)
+      );
+
+      return helper.response(res, 200, `Success Get Product`, [
+        result,
+        pageInfo,
+      ]);
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
     }
@@ -82,6 +95,7 @@ module.exports = {
       const id = req.params.id;
       const result = await getProductById(id);
       if (result.length > 0) {
+        client.setex(`getproductbyid:${id}`, 3600, JSON.stringify(result));
         return helper.response(res, 200, "Success Get Product By ID", result);
       } else {
         return helper.response(res, 404, `Product By Id : ${id} Not Found`);
@@ -94,7 +108,7 @@ module.exports = {
   // method input data
   postProduct: async (req, res) => {
     try {
-     const {
+      const {
         id_category,
         product_name,
         product_image,
@@ -110,9 +124,15 @@ module.exports = {
         status,
       };
 
-      if (id_category == "" || product_name == "" || product_image == "" || product_price == "" || status == "" ){
-          return helper.response(res, 201, `values has insert`);
-      }else{
+      if (
+        id_category == "" ||
+        product_name == "" ||
+        product_image == "" ||
+        product_price == "" ||
+        status == ""
+      ) {
+        return helper.response(res, 201, `values has insert`);
+      } else {
         const result = await postProduct(setData);
         return helper.response(res, 201, "Product Created", result);
       }
@@ -133,7 +153,7 @@ module.exports = {
         product_price,
         status,
       } = req.body;
-    
+
       const setData = {
         id_category,
         product_name,
@@ -144,9 +164,15 @@ module.exports = {
       };
       const checkId = await getProductById(id);
       if (checkId.length > 0) {
-        if (id_category == "" || product_name == "" || product_image == "" || product_price == "" || status == "" ){
+        if (
+          id_category == "" ||
+          product_name == "" ||
+          product_image == "" ||
+          product_price == "" ||
+          status == ""
+        ) {
           return helper.response(res, 201, `values has insert`);
-        }else{
+        } else {
           const result = await putProduct(setData, id);
           return helper.response(res, 201, "Product Updated", result);
         }
