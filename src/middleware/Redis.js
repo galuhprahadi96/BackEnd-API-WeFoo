@@ -49,6 +49,7 @@ module.exports = {
       keys.forEach((value) => {
         client.del(value);
       });
+      console.log("clear data redis");
       next();
     });
   },
@@ -94,8 +95,59 @@ module.exports = {
       keys.forEach((value) => {
         client.del(value);
       });
+      console.log("clear data redis");
       next();
     });
   },
-  //
+
+  // history orders
+  getHistoryRedis: (request, response, next) => {
+    client.get(
+      `gethistory:${JSON.stringify(request.query)}`,
+      (error, result) => {
+        const newResult = JSON.parse(result);
+        if (!error && result !== null) {
+          console.log("ada dalam redis");
+          return helper.response(
+            response,
+            200,
+            "Success Get History",
+            newResult.result,
+            newResult.pageInfo
+          );
+        } else {
+          console.log("belum ada didalam redis");
+          next();
+        }
+      }
+    );
+  },
+
+  getHistoryIdRedis: (request, response, next) => {
+    const { id } = request.params;
+    client.get(`gethistorybyid:${id}`, (error, result) => {
+      if (!error && result !== null) {
+        console.log("ada dalam redis");
+        return helper.response(
+          response,
+          200,
+          `Success Get history id ${id}`,
+          JSON.parse(result)
+        );
+      } else {
+        console.log("belum ada didalam redis");
+        next();
+      }
+    });
+  },
+
+  clearDataHistoryRedis: (request, response, next) => {
+    client.keys("gethistory*", (error, keys) => {
+      keys.forEach((value) => {
+        client.del(value);
+      });
+      console.log("clear data redis");
+      next();
+    });
+  },
 };

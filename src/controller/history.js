@@ -2,6 +2,7 @@
 const {
   getHistoryById,
   getAllHistory,
+  getHistoryChart,
   countHistory,
   countHistoryOrder,
   countTotalPriceOrder,
@@ -12,7 +13,9 @@ const { getOrderById } = require("../model/order");
 const qs = require("querystring");
 // import helper
 const helper = require("../helper/index.js");
-const { request } = require("express");
+// import redis
+const redis = require("redis");
+const client = redis.createClient();
 
 // logic prevlink pagination
 const getPrevLink = (page, currentQuery) => {
@@ -67,6 +70,15 @@ module.exports = {
       for (let i = 0; i < result.length; i++) {
         result[i].orders = await getOrderById(result[i].history_id);
       }
+
+      let newData = {
+        result,
+        pageInfo,
+      };
+      client.set(
+        `gethistory:${JSON.stringify(req.query)}`,
+        JSON.stringify(newData)
+      );
       return helper.response(res, 200, "Success Get history", result, pageInfo);
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
@@ -86,6 +98,7 @@ module.exports = {
           totalOrders: 0,
         };
       }
+
       return helper.response(res, 200, "Success count orders", data);
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
@@ -105,6 +118,7 @@ module.exports = {
           incomeYear: 0,
         };
       }
+
       return helper.response(res, 200, "Success get income orders year", data);
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
@@ -124,9 +138,28 @@ module.exports = {
           incomeDay: 0,
         };
       }
+
       return helper.response(res, 200, "Success get income order day", data);
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
+    }
+  },
+
+  getHistoryChart: async (request, response) => {
+    try {
+      const result = await getHistoryChart();
+      if (result.length > 0) {
+        return helper.response(
+          response,
+          200,
+          "Get History Chart Success",
+          result
+        );
+      } else {
+        return helper.response(response, 200, "Get History Chart Success", []);
+      }
+    } catch (error) {
+      return helper.response(response, 400, "Bad Request", error);
     }
   },
 
@@ -137,6 +170,7 @@ module.exports = {
       const history = await getHistoryById(id);
       const orders = await getOrderById(id);
       const result = [{ ...history[0], orders }];
+      client.setex(`gethistorybyid:${id}`, 3600, JSON.stringify(result));
       return helper.response(res, 200, `Success Get history id ${id}`, result);
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);

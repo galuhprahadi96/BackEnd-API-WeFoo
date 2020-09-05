@@ -74,6 +74,17 @@ module.exports = {
     });
   },
 
+  getHistoryChart: (date) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT DATE(history_created_at) AS date, SUM(subtotal) AS sum FROM history WHERE MONTH(history_created_at) = MONTH(NOW()) AND YEAR(history_created_at) = YEAR(NOW()) GROUP BY DATE(history_created_at)`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error));
+        }
+      );
+    });
+  },
+
   // method post history
   postHistory: (setData) => {
     return new Promise((resolve, reject) => {

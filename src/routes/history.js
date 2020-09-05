@@ -6,15 +6,18 @@ const {
   getHistoryOrder,
   getTotalPrice,
   getTotalOrderDay,
+  getHistoryChart,
 } = require("../controller/history");
 
 const { authAll } = require("../middleware/Auth");
+const { getHistoryRedis, getHistoryIdRedis } = require("../middleware/Redis");
 
 // GET
-route.get("/", authAll, getAllHistory);
+route.get("/", authAll, getHistoryRedis, getAllHistory);
 route.get("/count", authAll, getHistoryOrder);
 route.get("/total", authAll, getTotalPrice);
 route.get("/income", authAll, getTotalOrderDay);
-route.get("/:id", authAll, getHistoryById);
+route.get("/chart", authAll, getHistoryChart);
+route.get("/:id", authAll, getHistoryIdRedis, getHistoryById);
 
 module.exports = route;
