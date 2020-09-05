@@ -1,6 +1,5 @@
 // import data model product
 const {
-  sortName,
   getSearchProduct,
   getProduct,
   getProductCount,
@@ -13,6 +12,7 @@ const {
 const qs = require("querystring");
 // import helper
 const helper = require("../helper/index.js");
+const fs = require("fs");
 // import redis
 const redis = require("redis");
 const client = redis.createClient();
@@ -108,33 +108,27 @@ module.exports = {
   // method input data
   postProduct: async (req, res) => {
     try {
-      const {
-        id_category,
-        product_name,
-        product_image,
-        product_price,
-        status,
-      } = req.body;
+      const { id_category, product_name, product_price, status } = req.body;
       const setData = {
         id_category,
         product_name,
-        product_image,
+        product_image: req.file === undefined ? "" : req.file.filename,
         product_price,
         product_created_at: new Date(),
         status,
       };
 
       if (
-        id_category == "" ||
-        product_name == "" ||
-        product_image == "" ||
-        product_price == "" ||
-        status == ""
+        setData.id_category !== undefined &&
+        setData.product_name !== undefined &&
+        setData.product_image !== "" &&
+        setData.product_price !== undefined &&
+        setData.status !== undefined
       ) {
-        return helper.response(res, 201, `values has insert`);
-      } else {
         const result = await postProduct(setData);
         return helper.response(res, 201, "Product Created", result);
+      } else {
+        return helper.response(res, 201, `values has insert`);
       }
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
@@ -157,7 +151,7 @@ module.exports = {
       const setData = {
         id_category,
         product_name,
-        product_image,
+        product_image: req.file === undefined ? "" : req.file.filename,
         product_price,
         product_update_at: new Date(),
         status,
@@ -165,16 +159,23 @@ module.exports = {
       const checkId = await getProductById(id);
       if (checkId.length > 0) {
         if (
-          id_category == "" ||
-          product_name == "" ||
-          product_image == "" ||
-          product_price == "" ||
-          status == ""
+          setData.id_category !== undefined &&
+          setData.product_name !== undefined &&
+          setData.product_image !== "" &&
+          setData.product_price !== undefined &&
+          setData.status !== undefined
         ) {
-          return helper.response(res, 201, `values has insert`);
+          // hapus image lama
+          fs.unlink(`./uploads/${checkId[0].product_image}`, async (err) => {
+            if (err) {
+              throw err;
+            } else {
+              const result = await putProduct(setData, id);
+              return helper.response(res, 201, "Product Updated", result);
+            }
+          });
         } else {
-          const result = await putProduct(setData, id);
-          return helper.response(res, 201, "Product Updated", result);
+          return helper.response(res, 201, `values has insert`);
         }
       } else {
         return helper.response(res, 404, `Product By Id : ${id} Not Found`);
@@ -190,8 +191,14 @@ module.exports = {
       const id = req.params.id;
       const checkId = await getProductById(id);
       if (checkId.length > 0) {
-        const result = await deleteProduct(id);
-        return helper.response(res, 201, "Product Deleted", result);
+        fs.unlink(`./uploads/${checkId[0].product_image}`, async (err) => {
+          if (err) {
+            throw err;
+          } else {
+            const result = await deleteProduct(id);
+            return helper.response(res, 201, "Product Deleted", result);
+          }
+        });
       } else {
         return helper.response(res, 404, `Product by id : ${id} not found`);
       }

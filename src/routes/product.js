@@ -9,6 +9,7 @@ const {
 } = require("../controller/product");
 
 const { authAll, authAdmin } = require("../middleware/Auth");
+const uploadFilter = require("../middleware/Multer");
 const {
   clearDataProductRedis,
   getProductRedis,
@@ -22,10 +23,10 @@ route.get("/", authAll, getProductRedis, getAllProduct);
 route.get("/:id", authAll, getProductByIdRedis, getProductById);
 
 // POST
-route.post("/", authAdmin, clearDataProductRedis, postProduct);
+route.post("/", authAdmin, clearDataProductRedis, uploadFilter, postProduct);
 
 // PUT
-route.put("/:id", authAdmin, clearDataProductRedis, putProduct);
+route.put("/:id", authAdmin, clearDataProductRedis, uploadFilter, putProduct);
 
 // DELETE
 route.delete("/:id", authAdmin, clearDataProductRedis, deleteProduct);
