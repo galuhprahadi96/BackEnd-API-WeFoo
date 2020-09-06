@@ -16,39 +16,46 @@ module.exports = {
   registerUser: async (request, response) => {
     try {
       const { user_name, user_email, user_password } = request.body;
+      if (
+        user_name !== undefined &&
+        user_email !== undefined &&
+        user_password !== undefined
+      ) {
+        // Minimal delapan karakter, setidaknya ada satu huruf dan satu angka
+        const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        if (user_password.match(regex)) {
+          // cek email sudah ada apa belum
+          const checkemail = await checkUser(user_email);
+          if (checkemail.length > 0) {
+            return helper.response(response, 400, "Email already registered");
+          } else {
+            // enkripsi password
+            const salt = bcrypt.genSaltSync(10);
+            const encryptPassword = bcrypt.hashSync(user_password, salt);
+            // ------ //
+            const setData = {
+              user_name,
+              user_email,
+              user_password: encryptPassword,
+              user_role: 2,
+              user_status: 0,
+              user_created_at: new Date(),
+            };
 
-      // Minimal delapan karakter, setidaknya ada satu huruf dan satu angka
-      const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-      if (user_password.match(regex)) {
-        // cek email sudah ada apa belum
-        const checkemail = await checkUser(user_email);
-        if (checkemail.length > 0) {
-          return helper.response(response, 400, "Email already registered");
+            const result = await postUser(setData);
+
+            return helper.response(response, 201, "Register success", result);
+          }
         } else {
-          // enkripsi password
-          const salt = bcrypt.genSaltSync(10);
-          const encryptPassword = bcrypt.hashSync(user_password, salt);
-          // ------ //
-          const setData = {
-            user_name,
-            user_email,
-            user_password: encryptPassword,
-            user_role: 2,
-            user_status: 0,
-            user_created_at: new Date(),
-          };
-
-          const result = await postUser(setData);
-
-          return helper.response(response, 201, "Register success", result);
+          // password invalid
+          return helper.response(
+            response,
+            400,
+            "Password At least 8 characters, at least one letter and one number"
+          );
         }
       } else {
-        // password invalid
-        return helper.response(
-          response,
-          400,
-          "Password At least 8 characters, at least one letter and one number"
-        );
+        return helper.response(response, 400, "input value first");
       }
     } catch (error) {
       return helper.response(response, 400, "Bad Request", error);
@@ -59,44 +66,48 @@ module.exports = {
   loginUser: async (request, response) => {
     try {
       const { user_email, user_password } = request.body;
-      const checkDataUser = await checkUser(user_email);
-      // cekdata
-      if (checkDataUser.length >= 1) {
-        // cek status
-        if (checkDataUser[0].user_status == 1) {
-          //cek pass
-          const checkPassword = bcrypt.compareSync(
-            user_password,
-            checkDataUser[0].user_password
-          );
-          //jika benar
-          if (checkPassword) {
-            const {
-              user_id,
-              user_email,
-              user_name,
-              user_role,
-              user_status,
-            } = checkDataUser[0];
-            let payload = {
-              user_id,
-              user_email,
-              user_name,
-              user_role,
-              user_status,
-            };
-            const token = jwt.sign(payload, "RAHASIA", { expiresIn: "24h" });
-            payload = { ...payload, token };
+      if (user_email !== undefined && user_password !== undefined) {
+        const checkDataUser = await checkUser(user_email);
+        // cekdata
+        if (checkDataUser.length >= 1) {
+          // cek status
+          if (checkDataUser[0].user_status == 1) {
+            //cek pass
+            const checkPassword = bcrypt.compareSync(
+              user_password,
+              checkDataUser[0].user_password
+            );
+            //jika benar
+            if (checkPassword) {
+              const {
+                user_id,
+                user_email,
+                user_name,
+                user_role,
+                user_status,
+              } = checkDataUser[0];
+              let payload = {
+                user_id,
+                user_email,
+                user_name,
+                user_role,
+                user_status,
+              };
+              const token = jwt.sign(payload, "RAHASIA", { expiresIn: "24h" });
+              payload = { ...payload, token };
 
-            return helper.response(response, 200, "Success login", payload);
+              return helper.response(response, 200, "Success login", payload);
+            } else {
+              return helper.response(response, 400, "Wrong Password");
+            }
           } else {
-            return helper.response(response, 400, "Wrong Password");
+            return helper.response(response, 400, "user not Active");
           }
         } else {
-          return helper.response(response, 400, "user not Active");
+          return helper.response(response, 400, "Email not Registered");
         }
       } else {
-        return helper.response(response, 400, "Email not Registered");
+        return helper.response(response, 400, "input value first");
       }
     } catch (error) {
       return helper.response(response, 400, "Bad Request", error);
