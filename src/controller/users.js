@@ -21,38 +21,42 @@ module.exports = {
         user_email !== undefined &&
         user_password !== undefined
       ) {
-        // Minimal delapan karakter, setidaknya ada satu huruf dan satu angka
-        const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-        if (user_password.match(regex)) {
-          // cek email sudah ada apa belum
-          const checkemail = await checkUser(user_email);
-          if (checkemail.length > 0) {
-            return helper.response(response, 400, "Email already registered");
+        if (user_email.search("@") > 0) {
+          // Minimal delapan karakter, setidaknya ada satu huruf dan satu angka
+          const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+          if (user_password.match(regex)) {
+            // cek email sudah ada apa belum
+            const checkemail = await checkUser(user_email);
+            if (checkemail.length > 0) {
+              return helper.response(response, 400, "Email already registered");
+            } else {
+              // enkripsi password
+              const salt = bcrypt.genSaltSync(10);
+              const encryptPassword = bcrypt.hashSync(user_password, salt);
+              // ------ //
+              const setData = {
+                user_name,
+                user_email,
+                user_password: encryptPassword,
+                user_role: 2,
+                user_status: 0,
+                user_created_at: new Date(),
+              };
+
+              const result = await postUser(setData);
+
+              return helper.response(response, 201, "Register success", result);
+            }
           } else {
-            // enkripsi password
-            const salt = bcrypt.genSaltSync(10);
-            const encryptPassword = bcrypt.hashSync(user_password, salt);
-            // ------ //
-            const setData = {
-              user_name,
-              user_email,
-              user_password: encryptPassword,
-              user_role: 2,
-              user_status: 0,
-              user_created_at: new Date(),
-            };
-
-            const result = await postUser(setData);
-
-            return helper.response(response, 201, "Register success", result);
+            // password invalid
+            return helper.response(
+              response,
+              400,
+              "Password At least 8 characters, at least one letter and one number"
+            );
           }
         } else {
-          // password invalid
-          return helper.response(
-            response,
-            400,
-            "Password At least 8 characters, at least one letter and one number"
-          );
+          return helper.response(response, 400, "email not invalid");
         }
       } else {
         return helper.response(response, 400, "input value first");
