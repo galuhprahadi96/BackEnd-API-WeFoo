@@ -82,7 +82,7 @@ PORT=3001
 **3. PATCH**
 
 - `/product/:id` (Update product by id)
-  - `{ "product_name": "Lemon Juice", "product_image": "#", "product_price": 9000, "category_id": 1, "product_status" : 1 | 0 }`
+  - `{ "product_name": "Lemon Juice", "product_image": "#", "product_price": 9000, "category_id": 1, "status" : 1 | 0 }`
 
 - `/category/:id` (Update category by id)
   - `{ "category_name": "Snack" }`
