@@ -1,6 +1,6 @@
 <h1 align="center">ExpressJS - GI Pos RESTfull API</h1>
 
-#Gi Pos is a point of sales application for cafes and food outlets. 
+Gi Pos is a point of sales application for cafes and food outlets. 
 [More about Express](https://en.wikipedia.org/wiki/Express.js)
 
 ## Built With
