@@ -156,7 +156,7 @@ module.exports = {
               user_email,
               user_password: encryptPassword,
               user_status,
-              user_created_at: new Date(),
+              user_updated_at: new Date(),
             };
 
             const result = await patchUser(setData, id);

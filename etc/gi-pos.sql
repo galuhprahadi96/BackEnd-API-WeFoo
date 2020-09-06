@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Waktu pembuatan: 02 Sep 2020 pada 20.39
--- Versi server: 10.1.38-MariaDB
--- Versi PHP: 7.3.2
+-- Host: localhost
+-- Waktu pembuatan: 06 Sep 2020 pada 15.49
+-- Versi server: 10.4.11-MariaDB
+-- Versi PHP: 7.4.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -31,7 +31,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `category` (
   `category_id` int(11) NOT NULL,
   `category_name` varchar(50) NOT NULL,
-  `category_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `category_created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `category_update_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -41,7 +41,7 @@ CREATE TABLE `category` (
 
 INSERT INTO `category` (`category_id`, `category_name`, `category_created_at`, `category_update_at`) VALUES
 (1, 'Food', '2020-08-12 11:22:55', '0000-00-00 00:00:00'),
-(3, 'Drinks', '2020-08-29 03:30:09', '2020-08-29 03:30:08');
+(3, 'Drink', '2020-09-06 13:22:35', '2020-09-06 13:22:35');
 
 -- --------------------------------------------------------
 
@@ -52,8 +52,8 @@ INSERT INTO `category` (`category_id`, `category_name`, `category_created_at`, `
 CREATE TABLE `history` (
   `history_id` int(11) NOT NULL,
   `invoice` int(11) NOT NULL,
-  `subtotal` int(11) NOT NULL DEFAULT '0',
-  `history_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `subtotal` int(11) NOT NULL DEFAULT 0,
+  `history_created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -61,13 +61,7 @@ CREATE TABLE `history` (
 --
 
 INSERT INTO `history` (`history_id`, `invoice`, `subtotal`, `history_created_at`) VALUES
-(91, 220646, 107800, '2020-08-25 17:00:00'),
-(92, 100532, 5500, '2020-08-21 02:09:18'),
-(93, 536661, 165000, '2020-08-31 02:49:04'),
-(94, 818722, 9900, '2020-08-31 05:01:18'),
-(95, 427143, 165000, '2020-08-31 06:11:37'),
-(96, 622448, 13200, '2020-08-31 06:27:53'),
-(97, 648100, 66000, '2020-08-31 06:33:51');
+(100, 144218, 71500, '2020-09-06 13:26:39');
 
 -- --------------------------------------------------------
 
@@ -80,7 +74,7 @@ CREATE TABLE `order_product` (
   `history_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `order_qty` int(11) NOT NULL,
-  `order_total` int(11) NOT NULL DEFAULT '0'
+  `order_total` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -88,19 +82,8 @@ CREATE TABLE `order_product` (
 --
 
 INSERT INTO `order_product` (`order_id`, `history_id`, `product_id`, `order_qty`, `order_total`) VALUES
-(59, 91, 10, 1, 60000),
-(60, 91, 7, 1, 33000),
-(61, 91, 6, 1, 5000),
-(62, 92, 6, 1, 5000),
-(63, 93, 10, 2, 120000),
-(64, 93, 9, 1, 30000),
-(65, 94, 15, 2, 4000),
-(66, 94, 6, 1, 5000),
-(67, 95, 9, 1, 30000),
-(68, 95, 10, 2, 120000),
-(69, 96, 16, 2, 10000),
-(70, 96, 15, 1, 2000),
-(71, 97, 10, 1, 60000);
+(76, 100, 30, 2, 60000),
+(77, 100, 27, 1, 5000);
 
 -- --------------------------------------------------------
 
@@ -112,9 +95,9 @@ CREATE TABLE `product` (
   `product_id` int(11) NOT NULL,
   `id_category` int(11) NOT NULL,
   `product_name` varchar(100) NOT NULL,
-  `product_image` varchar(100) NOT NULL,
+  `product_image` varchar(255) NOT NULL,
   `product_price` int(11) NOT NULL,
-  `product_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `product_created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `product_update_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `status` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -124,16 +107,15 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`product_id`, `id_category`, `product_name`, `product_image`, `product_price`, `product_created_at`, `product_update_at`, `status`) VALUES
-(1, 3, 'Espresso', 'espresso.png', 10000, '2020-08-28 04:33:02', '2020-08-15 13:45:27', 1),
-(3, 3, 'Coffe Latte', 'coffe_latte.png', 15000, '2020-08-28 04:33:36', '2020-08-28 04:31:14', 0),
-(6, 3, 'Cappucino', 'cappucino.png', 5000, '2020-08-28 04:49:15', '2020-08-28 04:49:15', 1),
-(7, 1, 'Red Velvet Latte', 'velvet.png', 33000, '2020-08-23 12:00:26', '0000-00-00 00:00:00', 1),
-(10, 1, 'Chicken Katsu Dabu-dabu', 'chicken_katsu.png', 60000, '2020-08-28 04:47:25', '2020-08-28 04:34:29', 1),
-(11, 11, 'Choco Rhum', 'rum.png', 28000, '2020-09-02 07:16:58', '2020-09-02 07:16:58', 0),
-(12, 1, 'Wiener Schnitzel', 'wiener_schnitzel.png', 69000, '2020-08-28 04:49:28', '2020-08-28 04:49:28', 1),
-(15, 1, 'Pisang Goreng', 'pisanggoreng', 2000, '2020-08-31 04:02:47', '0000-00-00 00:00:00', 1),
-(16, 1, 'Mineral water', 'mineral', 5000, '2020-08-31 05:06:38', '0000-00-00 00:00:00', 1),
-(17, 3, 'choco vanilla', 'terserah', 10000, '2020-08-31 06:30:06', '0000-00-00 00:00:00', 1);
+(25, 3, 'Espresso', '2020-09-06T13-10-00.488Z-espresso.png', 10000, '2020-09-06 13:10:00', '0000-00-00 00:00:00', 1),
+(26, 3, 'Coffe Latte', '2020-09-06T13-11-00.035Z-coffelatte.png', 15000, '2020-09-06 13:11:00', '0000-00-00 00:00:00', 1),
+(27, 3, 'Cappucino', '2020-09-06T13-12-00.320Z-cappucino.png', 5000, '2020-09-06 13:12:00', '0000-00-00 00:00:00', 1),
+(28, 3, 'Red Velvet Latte', '2020-09-06T13-13-12.221Z-redvelvet.png', 33000, '2020-09-06 13:13:12', '0000-00-00 00:00:00', 1),
+(29, 1, 'Choco Rhum', '2020-09-06T13-14-59.959Z-chocorum.png', 28000, '2020-09-06 13:15:00', '0000-00-00 00:00:00', 1),
+(30, 1, 'Black Forest', '2020-09-06T13-15-46.411Z-blackforest.png', 30000, '2020-09-06 13:15:46', '0000-00-00 00:00:00', 1),
+(31, 1, 'Chicken Katsu Dabu-dabu', '2020-09-06T13-16-37.001Z-chickenkatsu.png', 60000, '2020-09-06 13:16:37', '0000-00-00 00:00:00', 1),
+(32, 1, 'Salmon Truffle Teriyaki', '2020-09-06T13-17-06.776Z-salmon.png', 10000, '2020-09-06 13:17:06', '0000-00-00 00:00:00', 1),
+(33, 1, 'Wiener Schnitzel', '2020-09-06T13-18-01.483Z-wiener.png', 69000, '2020-09-06 13:18:01', '0000-00-00 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -148,7 +130,7 @@ CREATE TABLE `users` (
   `user_password` varchar(255) NOT NULL,
   `user_role` int(1) NOT NULL,
   `user_status` int(1) NOT NULL,
-  `user_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `user_created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `user_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -157,8 +139,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `user_name`, `user_email`, `user_password`, `user_role`, `user_status`, `user_created_at`, `user_updated_at`) VALUES
-(1, 'galuh', 'galuh@gmail.com', '$2b$10$Q7Ow56Pab3hrjKDOFE4f4OdBl.dYrURtaeSlTwrrXinBMGoO9JWaq', 1, 1, '2020-09-02 06:39:23', '0000-00-00 00:00:00'),
-(2, 'galuh', 'galuh1@gmail.com', '$2b$10$H2XunV24jElLPpKy..4FKeoEJ3USz68Nd.LixKbZTeDyi5TqJpEnW', 1, 1, '2020-09-02 06:42:31', '0000-00-00 00:00:00');
+(3, 'admin', 'admin@gmail.com', '$2b$10$CDCS.xKBGT30B2MDNUFLBeMRy86hKF4m/7MzKcE54uGImjbnzmS3u', 1, 1, '2020-09-04 14:59:23', '0000-00-00 00:00:00'),
+(4, 'user1', 'user@gmail.com', '$2b$10$Jg1HzWQSe9oQ81iETDoZHOtHR0JqYpyQM0.prHGMBT5cp8pu1.Hq.', 2, 1, '2020-09-06 13:40:20', '2020-09-06 13:40:20');
 
 --
 -- Indexes for dumped tables
@@ -202,31 +184,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT untuk tabel `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `history`
 --
 ALTER TABLE `history`
-  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
 -- AUTO_INCREMENT untuk tabel `order_product`
 --
 ALTER TABLE `order_product`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT untuk tabel `product`
 --
 ALTER TABLE `product`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
