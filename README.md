@@ -1,6 +1,7 @@
 <h1 align="center">ExpressJS - GI Pos RESTfull API</h1>
 
-#background_projek. [More about Express](https://en.wikipedia.org/wiki/Express.js)
+Gi Pos is a point of sales application for cafes and food outlets. 
+[More about Express](https://en.wikipedia.org/wiki/Express.js)
 
 ## Built With
 
@@ -48,21 +49,46 @@ PORT=3001
 **1. GET**
 
 - `/product`(Get all product)
-- `/product/:id` (Get product by id)
-- `/category` (Get all category)
-- `/category/:id` (Get category by id)
+  - `{ "page": 1, "limit": 3, "sort" : "product_price DESC" }`
+
+- `/product/search` (Get product by name)
+  - `{ "keyword": "latte" }`
+
+- `/product/:id`(Get product by id)
+
+- `/category`(Get all category)
+
+- `/category:id`(Get category by id)
+
+- `/history`(Get all history)
+  - `{ "page": 1, "limit": 3, "sort" : "history_created_at DESC" }`
+
+- `/history:id`(Get history by id)
+
+- `/order`(Get all order)
+  - `{ "page": 1, "limit": 5, "sort" : "order_id DESC" }`
 
 **2. POST**
 
 - `/product` (Post product)
-  - `{ "product_name": "Tacos", "category_id": 2, "product_price": 85000 , "status" : 1 | 0}`
+  - `{ "product_name": "Orange Juice", "product_image": "#", "product_price": 10000, "category_id": 1, "status" : 1 | 0 }`
+
+- `/category` (Post category)
+  - `{ "category_name": "Beverage" }`
+
+- `/order` (Post order)
+  - `{ "orders": [{ "product_id": 5, "qty": 2 }, { "product_id": 7, "qty": 2 }] }`
 
 **3. PATCH**
 
 - `/product/:id` (Update product by id)
+  - `{ "product_name": "Lemon Juice", "product_image": "#", "product_price": 9000, "category_id": 1, "status" : 1 | 0 }`
 
-  - `{"product_name" : "Tequila", "category_id" : 1, "product_price" : 186000, "status" : 1 | 0}`
+- `/category/:id` (Update category by id)
+  - `{ "category_name": "Snack" }`
 
 **4. DELETE**
 
 - `/product/:id` (Delete product by id)
+
+- `/category/:id` (Delete category by id)
