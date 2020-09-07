@@ -92,3 +92,6 @@ PORT=3001
 - `/product/:id` (Delete product by id)
 
 - `/category/:id` (Delete category by id)
+
+** POSTMAN LINK **
+[CLICK HERE](https://web.postman.co/collections/8990216-64e23818-2604-46cf-b35b-5c5a95f8a704?version=latest&workspace=9494c810-5d02-4bd7-8044-970fbebaa464)
