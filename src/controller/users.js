@@ -71,44 +71,50 @@ module.exports = {
     try {
       const { user_email, user_password } = request.body;
       if (user_email !== undefined && user_password !== undefined) {
-        const checkDataUser = await checkUser(user_email);
-        // cekdata
-        if (checkDataUser.length >= 1) {
-          // cek status
-          if (checkDataUser[0].user_status == 1) {
-            //cek pass
-            const checkPassword = bcrypt.compareSync(
-              user_password,
-              checkDataUser[0].user_password
-            );
-            //jika benar
-            if (checkPassword) {
-              const {
-                user_id,
-                user_email,
-                user_name,
-                user_role,
-                user_status,
-              } = checkDataUser[0];
-              let payload = {
-                user_id,
-                user_email,
-                user_name,
-                user_role,
-                user_status,
-              };
-              const token = jwt.sign(payload, "RAHASIA", { expiresIn: "24h" });
-              payload = { ...payload, token };
+        if (user_email.search("@") > 0) {
+          const checkDataUser = await checkUser(user_email);
+          // cekdata
+          if (checkDataUser.length >= 1) {
+            // cek status
+            if (checkDataUser[0].user_status == 1) {
+              //cek pass
+              const checkPassword = bcrypt.compareSync(
+                user_password,
+                checkDataUser[0].user_password
+              );
+              //jika benar
+              if (checkPassword) {
+                const {
+                  user_id,
+                  user_email,
+                  user_name,
+                  user_role,
+                  user_status,
+                } = checkDataUser[0];
+                let payload = {
+                  user_id,
+                  user_email,
+                  user_name,
+                  user_role,
+                  user_status,
+                };
+                const token = jwt.sign(payload, "RAHASIA", {
+                  expiresIn: "24h",
+                });
+                payload = { ...payload, token };
 
-              return helper.response(response, 200, "Success login", payload);
+                return helper.response(response, 200, "Success login", payload);
+              } else {
+                return helper.response(response, 400, "Wrong Password");
+              }
             } else {
-              return helper.response(response, 400, "Wrong Password");
+              return helper.response(response, 400, "user not Active");
             }
           } else {
-            return helper.response(response, 400, "user not Active");
+            return helper.response(response, 400, "Email not Registered");
           }
         } else {
-          return helper.response(response, 400, "Email not Registered");
+          return helper.response(response, 400, "email not invalid");
         }
       } else {
         return helper.response(response, 400, "input value first");
