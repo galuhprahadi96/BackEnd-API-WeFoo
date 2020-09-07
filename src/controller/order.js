@@ -30,23 +30,18 @@ module.exports = {
     let dataOrder;
     let subTotal = 0;
 
-    // ambil data random invoice
     dataInvoice = {
       invoice: randomInvoice(),
     };
 
     try {
-      //input invoice
       const invoiceResult = await postHistory(dataInvoice);
 
-      // ambil data dan simpan ke dalam post order
       for (let i = 0; i < orders.length; i++) {
-        // ambil harga product
         let resultPrice = await getHarga(orders[i].product_id);
         let { product_price } = resultPrice[0];
         let orderTotal = product_price * orders[i].qty;
 
-        // jumlahkan subtotal
         subTotal += orderTotal;
         dataOrder = {
           history_id: invoiceResult.history_id,
@@ -55,20 +50,16 @@ module.exports = {
           order_total: orderTotal,
         };
 
-        // simpan data order
         let order = await postOrder(dataOrder);
       }
 
-      // update data history
       const setData = {
         subtotal: ppn(subTotal),
         history_created_at: new Date(),
       };
 
-      // update history
       let history = await patchHistory(setData, dataOrder.history_id);
 
-      // ambil data order
       let product = await getOrderById(invoiceResult.history_id);
 
       const result = {

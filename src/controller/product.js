@@ -10,14 +10,13 @@ const {
 } = require("../model/product");
 
 const qs = require("querystring");
-// import helper
+
 const helper = require("../helper/index.js");
 const fs = require("fs");
-// import redis
+
 const redis = require("redis");
 const client = redis.createClient();
 
-// logic prevlink pagination
 const getPrevLink = (page, currentQuery) => {
   if (page > 1) {
     const generatedPage = {
@@ -41,10 +40,8 @@ const getNextLink = (page, totalPage, currentQuery) => {
     return null;
   }
 };
-// end logic pagination
 
 module.exports = {
-  // method ambil data product
   getAllProduct: async (req, res) => {
     let { page, limit, name, sort } = req.query;
     let pageNumber = page === undefined ? 1 : page;
@@ -60,7 +57,7 @@ module.exports = {
     let prevLink = getPrevLink(pageNumber, req.query);
     let nextLink = getNextLink(pageNumber, totalPage, req.query);
     const pageInfo = {
-      pageNumber, // page: page
+      pageNumber,
       totalPage,
       limitItem,
       totalData,
@@ -69,7 +66,7 @@ module.exports = {
     };
     try {
       const result = await getProduct(limitItem, offset, nameSort, sortBy);
-      // simpan ke redis
+
       let newData = {
         result,
         pageInfo,
@@ -89,7 +86,6 @@ module.exports = {
     }
   },
 
-  // method ambil data per id
   getProductById: async (req, res) => {
     try {
       const id = req.params.id;
@@ -105,7 +101,6 @@ module.exports = {
     }
   },
 
-  // method input data
   postProduct: async (req, res) => {
     try {
       const { id_category, product_name, product_price, status } = req.body;
@@ -119,11 +114,11 @@ module.exports = {
       };
 
       if (
-        setData.id_category !== undefined &&
-        setData.product_name !== undefined &&
+        setData.id_category !== "" &&
+        setData.product_name !== "" &&
         setData.product_image !== "" &&
-        setData.product_price !== undefined &&
-        setData.status !== undefined
+        setData.product_price !== "" &&
+        setData.status !== ""
       ) {
         const result = await postProduct(setData);
         return helper.response(res, 201, "Product Created", result);
@@ -135,18 +130,10 @@ module.exports = {
     }
   },
 
-  // method update data
-
   putProduct: async (req, res) => {
     try {
       const id = req.params.id;
-      const {
-        id_category,
-        product_name,
-        product_image,
-        product_price,
-        status,
-      } = req.body;
+      const { id_category, product_name, product_price, status } = req.body;
 
       const setData = {
         id_category,
@@ -159,13 +146,12 @@ module.exports = {
       const checkId = await getProductById(id);
       if (checkId.length > 0) {
         if (
-          setData.id_category !== undefined &&
-          setData.product_name !== undefined &&
+          setData.id_category !== "" &&
+          setData.product_name !== "" &&
           setData.product_image !== "" &&
-          setData.product_price !== undefined &&
-          setData.status !== undefined
+          setData.product_price !== "" &&
+          setData.status !== ""
         ) {
-          // hapus image lama
           fs.unlink(`./uploads/${checkId[0].product_image}`, async (err) => {
             if (err) {
               throw err;
@@ -185,7 +171,6 @@ module.exports = {
     }
   },
 
-  // method delete product
   deleteProduct: async (req, res) => {
     try {
       const id = req.params.id;
@@ -207,7 +192,6 @@ module.exports = {
     }
   },
 
-  // method search name
   getSearchProduct: async (req, res) => {
     try {
       const { keyword } = req.query;

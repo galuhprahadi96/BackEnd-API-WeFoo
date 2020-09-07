@@ -17,7 +17,7 @@ module.exports = {
   getAllCategory: async (req, res) => {
     try {
       const result = await getAllCategory();
-      // simpan ke dalam redis
+
       client.setex("getcategory", 3600, JSON.stringify(result));
       return helper.response(res, 200, "Success Get Category", result);
     } catch (error) {
@@ -31,7 +31,6 @@ module.exports = {
       const id = req.params.id;
       const result = await getCategoryById(id);
       if (result.length > 0) {
-        // simpan ke redis
         client.setex(`getcategorybyid:${id}`, 3600, JSON.stringify(result));
         return helper.response(res, 200, "Success Get Category Id", result);
       } else {
@@ -50,7 +49,7 @@ module.exports = {
         category_name,
         category_created_at: new Date(),
       };
-      // error handling category
+
       if (category_name === "") {
         return helper.response(res, 201, `values has insert`);
       } else {

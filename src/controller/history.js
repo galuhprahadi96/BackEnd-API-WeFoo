@@ -57,7 +57,7 @@ module.exports = {
     let prevLink = getPrevLink(pageNumber, req.query);
     let nextLink = getNextLink(pageNumber, totalPage, req.query);
     const pageInfo = {
-      pageNumber, // page: page
+      pageNumber,
       totalPage,
       limitItem,
       totalData,

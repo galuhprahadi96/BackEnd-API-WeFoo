@@ -12,28 +12,20 @@ const {
 const { JsonWebTokenError } = require("jsonwebtoken");
 
 module.exports = {
-  // register
   registerUser: async (request, response) => {
     try {
       const { user_name, user_email, user_password } = request.body;
-      if (
-        user_name !== undefined &&
-        user_email !== undefined &&
-        user_password !== undefined
-      ) {
+      if (user_name !== "" && user_email !== "" && user_password !== "") {
         if (user_email.search("@") > 0) {
-          // Minimal delapan karakter, setidaknya ada satu huruf dan satu angka
           const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
           if (user_password.match(regex)) {
-            // cek email sudah ada apa belum
             const checkemail = await checkUser(user_email);
             if (checkemail.length > 0) {
               return helper.response(response, 400, "Email already registered");
             } else {
-              // enkripsi password
               const salt = bcrypt.genSaltSync(10);
               const encryptPassword = bcrypt.hashSync(user_password, salt);
-              // ------ //
+
               const setData = {
                 user_name,
                 user_email,
@@ -48,7 +40,6 @@ module.exports = {
               return helper.response(response, 201, "Register success", result);
             }
           } else {
-            // password invalid
             return helper.response(
               response,
               400,
@@ -70,19 +61,17 @@ module.exports = {
   loginUser: async (request, response) => {
     try {
       const { user_email, user_password } = request.body;
-      if (user_email !== undefined && user_password !== undefined) {
+      if (user_email !== "" && user_password !== "") {
         if (user_email.search("@") > 0) {
           const checkDataUser = await checkUser(user_email);
-          // cekdata
+
           if (checkDataUser.length >= 1) {
-            // cek status
             if (checkDataUser[0].user_status == 1) {
-              //cek pass
               const checkPassword = bcrypt.compareSync(
                 user_password,
                 checkDataUser[0].user_password
               );
-              //jika benar
+
               if (checkPassword) {
                 const {
                   user_id,
@@ -124,8 +113,6 @@ module.exports = {
     }
   },
 
-  // manag user
-
   getAllUser: async (req, res) => {
     try {
       const result = await getAllUser();
@@ -158,20 +145,17 @@ module.exports = {
       const checkId = await getUserById(id);
 
       if (checkId.length > 0) {
-        // error handling
         if (
-          user_name !== undefined &&
-          user_email !== undefined &&
-          user_password !== undefined &&
-          user_status !== undefined
+          user_name !== "" &&
+          user_email !== "" &&
+          user_password !== "" &&
+          user_status !== ""
         ) {
-          // Minimal delapan karakter, setidaknya ada satu huruf dan satu angka
           const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
           if (user_password.match(regex)) {
-            // enkripsi password
             const salt = bcrypt.genSaltSync(10);
             const encryptPassword = bcrypt.hashSync(user_password, salt);
-            // ------ //
+
             const setData = {
               user_name,
               user_email,
@@ -183,7 +167,6 @@ module.exports = {
             const result = await patchUser(setData, id);
             return helper.response(res, 201, "User Updated", result);
           } else {
-            // password invalid
             return helper.response(
               res,
               400,

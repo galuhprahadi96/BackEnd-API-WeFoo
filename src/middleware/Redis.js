@@ -10,7 +10,6 @@ module.exports = {
       (error, result) => {
         const newResult = JSON.parse(result);
         if (!error && result !== null) {
-          console.log("ada dalam redis");
           return helper.response(
             response,
             200,
@@ -19,7 +18,6 @@ module.exports = {
             newResult.pageInfo
           );
         } else {
-          console.log("belum ada didalam redis");
           next();
         }
       }
@@ -30,7 +28,6 @@ module.exports = {
     const { id } = request.params;
     client.get(`getproductbyid:${id}`, (error, result) => {
       if (!error && result !== null) {
-        console.log("ada dalam redis");
         return helper.response(
           response,
           200,
@@ -38,7 +35,6 @@ module.exports = {
           JSON.parse(result)
         );
       } else {
-        console.log("belum ada didalam redis");
         next();
       }
     });
@@ -49,7 +45,7 @@ module.exports = {
       keys.forEach((value) => {
         client.del(value);
       });
-      console.log("clear data redis");
+
       next();
     });
   },
@@ -58,7 +54,6 @@ module.exports = {
   getCategoryRedis: (request, response, next) => {
     client.get("getcategory", (error, result) => {
       if (!error && result !== null) {
-        console.log("ada dalam redis");
         return helper.response(
           response,
           200,
@@ -66,7 +61,6 @@ module.exports = {
           JSON.parse(result)
         );
       } else {
-        console.log("belum ada didalam redis");
         next();
       }
     });
@@ -76,7 +70,6 @@ module.exports = {
     const { id } = request.params;
     client.get(`getcategorybyid:${id}`, (error, result) => {
       if (!error && result !== null) {
-        console.log("ada dalam redis");
         return helper.response(
           response,
           200,
@@ -84,7 +77,6 @@ module.exports = {
           JSON.parse(result)
         );
       } else {
-        console.log("belum ada didalam redis");
         next();
       }
     });
@@ -95,7 +87,7 @@ module.exports = {
       keys.forEach((value) => {
         client.del(value);
       });
-      console.log("clear data redis");
+
       next();
     });
   },
@@ -107,7 +99,6 @@ module.exports = {
       (error, result) => {
         const newResult = JSON.parse(result);
         if (!error && result !== null) {
-          console.log("ada dalam redis");
           return helper.response(
             response,
             200,
@@ -116,7 +107,6 @@ module.exports = {
             newResult.pageInfo
           );
         } else {
-          console.log("belum ada didalam redis");
           next();
         }
       }
@@ -127,7 +117,6 @@ module.exports = {
     const { id } = request.params;
     client.get(`gethistorybyid:${id}`, (error, result) => {
       if (!error && result !== null) {
-        console.log("ada dalam redis");
         return helper.response(
           response,
           200,
@@ -135,7 +124,6 @@ module.exports = {
           JSON.parse(result)
         );
       } else {
-        console.log("belum ada didalam redis");
         next();
       }
     });
@@ -146,7 +134,7 @@ module.exports = {
       keys.forEach((value) => {
         client.del(value);
       });
-      console.log("clear data redis");
+
       next();
     });
   },
