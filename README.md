@@ -67,8 +67,17 @@ PORT=3001
 
 - `/order`(Get all order)
   - `{ "page": 1, "limit": 5, "sort" : "order_id DESC" }`
+  
+- `/users`(Get all users)
+
+- `/users/:id`(Get Users By Id)
 
 **2. POST**
+- `users/login` (users login)
+  - `{ "user_name": "admin@gmail.com", "user_password": "admin1234" }`
+  
+- `users/register` (users register)
+  - `{ "user_name": "chasier", "user_email": "chasier@gmail.com", "user_password": "user1234" }`
 
 - `/product` (Post product)
   - `{ "product_name": "Orange Juice", "product_image": "#", "product_price": 10000, "category_id": 1, "status" : 1 | 0 }`
@@ -86,12 +95,17 @@ PORT=3001
 
 - `/category/:id` (Update category by id)
   - `{ "category_name": "Snack" }`
+  
+- `/users/:id` (Update users by id)
+  - `{ "user_name": "user", "user_email": "user@gmail.com", "user_password": "user1234", "user_status":1|0 }`
 
 **4. DELETE**
 
 - `/product/:id` (Delete product by id)
 
 - `/category/:id` (Delete category by id)
+
+- `/users/:id` (Delete User by id)
 
 
 [POSTMAN LINK](https://web.postman.co/collections/8990216-64e23818-2604-46cf-b35b-5c5a95f8a704?version=latest&workspace=9494c810-5d02-4bd7-8044-970fbebaa464)
