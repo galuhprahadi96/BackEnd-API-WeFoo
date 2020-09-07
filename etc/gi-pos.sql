@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Waktu pembuatan: 06 Sep 2020 pada 15.49
+-- Waktu pembuatan: 07 Sep 2020 pada 13.50
 -- Versi server: 10.4.11-MariaDB
 -- Versi PHP: 7.4.2
 
@@ -140,7 +140,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `user_name`, `user_email`, `user_password`, `user_role`, `user_status`, `user_created_at`, `user_updated_at`) VALUES
 (3, 'admin', 'admin@gmail.com', '$2b$10$CDCS.xKBGT30B2MDNUFLBeMRy86hKF4m/7MzKcE54uGImjbnzmS3u', 1, 1, '2020-09-04 14:59:23', '0000-00-00 00:00:00'),
-(4, 'user1', 'user@gmail.com', '$2b$10$Jg1HzWQSe9oQ81iETDoZHOtHR0JqYpyQM0.prHGMBT5cp8pu1.Hq.', 2, 1, '2020-09-06 13:40:20', '2020-09-06 13:40:20');
+(4, 'user', 'user@gmail.com', '$2b$10$Jg1HzWQSe9oQ81iETDoZHOtHR0JqYpyQM0.prHGMBT5cp8pu1.Hq.', 2, 1, '2020-09-07 11:48:52', '2020-09-06 13:40:20');
 
 --
 -- Indexes for dumped tables

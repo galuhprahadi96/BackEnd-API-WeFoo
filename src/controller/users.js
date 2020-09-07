@@ -57,7 +57,6 @@ module.exports = {
     }
   },
 
-  // login
   loginUser: async (request, response) => {
     try {
       const { user_email, user_password } = request.body;

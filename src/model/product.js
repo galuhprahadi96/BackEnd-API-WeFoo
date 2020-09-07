@@ -1,7 +1,6 @@
 const connection = require("../config/mysql");
 
 module.exports = {
-  // ambil semua data product
   getProduct: (limit, offset, name, sort) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -13,7 +12,6 @@ module.exports = {
     });
   },
 
-  // hitung jumlah data
   getProductCount: () => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -25,7 +23,6 @@ module.exports = {
     });
   },
 
-  // cari data product by name
   getSearchProduct: (keyword) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -37,7 +34,6 @@ module.exports = {
     });
   },
 
-  // ambil data product dengan id tertentu
   getProductById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -50,7 +46,6 @@ module.exports = {
     });
   },
 
-  // input data product
   postProduct: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -71,8 +66,6 @@ module.exports = {
     });
   },
 
-  // update data product
-
   putProduct: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -92,8 +85,6 @@ module.exports = {
       );
     });
   },
-
-  // delete data product
 
   deleteProduct: (id) => {
     return new Promise((resolve, reject) => {

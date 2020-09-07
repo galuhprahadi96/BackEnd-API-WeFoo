@@ -3,9 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const cors = require("cors");
-// ===================================
 const routerNavigation = require("./src");
-// ===================================
 
 const app = express();
 
@@ -15,7 +13,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 app.use(express.static("uploads"));
 
-// CORS
 app.use((request, response, next) => {
   response.header("Access-Control-Allow-Origin", "*");
   response.header(
@@ -25,9 +22,7 @@ app.use((request, response, next) => {
   next();
 });
 
-// ===================================
 app.use("/", routerNavigation);
-// ===================================
 
 app.get("*", (request, response) => {
   response.status(404).send("Path Not Found !");

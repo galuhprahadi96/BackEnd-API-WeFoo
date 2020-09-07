@@ -1,13 +1,10 @@
-// export models
 const { postHistory, patchHistory } = require("../model/history");
 const { postOrder, getOrderById, getHarga } = require("../model/order");
 
-// import helper
 const helper = require("../helper/index.js");
 const { request, query } = require("express");
 const { response } = require("../helper/index.js");
 
-// cetak invoice
 const randomInvoice = () => {
   let random = "";
   for (let i = 1; i <= 6; i++) {
@@ -22,10 +19,8 @@ const ppn = (total) => {
   return ppn + total;
 };
 
-// method
 module.exports = {
   postOrder: async (req, res) => {
-    // ambil ata request
     let orders = req.body.orders;
     let dataOrder;
     let subTotal = 0;

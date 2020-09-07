@@ -12,7 +12,6 @@ const {
 const { authAll } = require("../middleware/Auth");
 const { getHistoryRedis, getHistoryIdRedis } = require("../middleware/Redis");
 
-// GET
 route.get("/", authAll, getHistoryRedis, getAllHistory);
 route.get("/count", authAll, getHistoryOrder);
 route.get("/total", authAll, getTotalPrice);

@@ -2,7 +2,6 @@ const multer = require("multer");
 const helper = require("../helper/index");
 const { request } = require("express");
 
-// simpan image
 const storage = multer.diskStorage({
   destination: (request, file, callback) => {
     callback(null, "./uploads/");
@@ -15,7 +14,6 @@ const storage = multer.diskStorage({
   },
 });
 
-// validasi file gambar
 const fileFilter = (request, file, callback) => {
   if (
     file.mimetype === "image/jpeg" ||

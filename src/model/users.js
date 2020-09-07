@@ -17,7 +17,7 @@ module.exports = {
       });
     });
   },
-  // cek email
+
   checkUser: (email) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -30,7 +30,6 @@ module.exports = {
     });
   },
 
-  // manag user
   getAllUser: () => {
     return new Promise((resolve, reject) => {
       connection.query("SELECT * FROM users", (error, result) => {

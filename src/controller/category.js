@@ -7,13 +7,11 @@ const {
   deleteCategory,
 } = require("../model/category");
 
-// import helper
 const helper = require("../helper/index.js");
 const redis = require("redis");
 const client = redis.createClient();
 
 module.exports = {
-  // ambil data category
   getAllCategory: async (req, res) => {
     try {
       const result = await getAllCategory();
@@ -25,7 +23,6 @@ module.exports = {
     }
   },
 
-  // ambil data category by id
   getCategoryById: async (req, res) => {
     try {
       const id = req.params.id;
@@ -41,7 +38,6 @@ module.exports = {
     }
   },
 
-  // input data category
   postCategory: async (req, res) => {
     try {
       const { category_name } = req.body;
@@ -54,7 +50,6 @@ module.exports = {
         return helper.response(res, 201, `values has insert`);
       } else {
         const result = await postCategory(setData);
-        // console.log(result);
         return helper.response(res, 201, "Category Created", result);
       }
     } catch (error) {
@@ -62,7 +57,6 @@ module.exports = {
     }
   },
 
-  // update data category
   patchCategory: async (req, res) => {
     try {
       const id = req.params.id;
@@ -74,7 +68,6 @@ module.exports = {
       };
       const checkId = await getCategoryById(id);
       if (checkId.length > 0) {
-        // error handling category
         if (category_name === "") {
           return helper.response(res, 201, `values has insert`);
         } else {
@@ -89,7 +82,6 @@ module.exports = {
     }
   },
 
-  // Delete data category
   deleteCategory: async (req, res) => {
     try {
       const id = req.params.id;

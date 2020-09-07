@@ -1,7 +1,6 @@
 const connection = require("../config/mysql");
 
 module.exports = {
-  // ambil data harga
   getHarga: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -14,7 +13,6 @@ module.exports = {
     });
   },
 
-  // ambil history by id
   getOrderById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -27,7 +25,6 @@ module.exports = {
     });
   },
 
-  // post order
   postOrder: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query(

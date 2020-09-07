@@ -1,7 +1,6 @@
 const connection = require("../config/mysql");
 
 module.exports = {
-  // ambil data Category
   getAllCategory: () => {
     return new Promise((resolve, reject) => {
       connection.query("SELECT * FROM category", (error, result) => {
@@ -10,7 +9,6 @@ module.exports = {
     });
   },
 
-  // ambil category by id
   getCategoryById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -23,7 +21,6 @@ module.exports = {
     });
   },
 
-  // input data category
   postCategory: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -44,7 +41,6 @@ module.exports = {
     });
   },
 
-  // update category
   patchCategory: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -56,7 +52,6 @@ module.exports = {
               category_id: id,
               ...setData,
             };
-            // console.log(newResult);
             resolve(newResult);
           } else {
             reject(new Error(error));
@@ -65,8 +60,6 @@ module.exports = {
       );
     });
   },
-
-  // delete data category
 
   deleteCategory: (id) => {
     return new Promise((resolve, reject) => {

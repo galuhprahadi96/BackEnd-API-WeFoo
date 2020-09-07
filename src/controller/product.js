@@ -1,4 +1,3 @@
-// import data model product
 const {
   getSearchProduct,
   getProduct,
@@ -10,10 +9,8 @@ const {
 } = require("../model/product");
 
 const qs = require("querystring");
-
 const helper = require("../helper/index.js");
 const fs = require("fs");
-
 const redis = require("redis");
 const client = redis.createClient();
 

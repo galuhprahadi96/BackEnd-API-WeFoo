@@ -3,7 +3,6 @@ const client = redis.createClient();
 const helper = require("../helper/index");
 
 module.exports = {
-  // product
   getProductRedis: (request, response, next) => {
     client.get(
       `getproduct:${JSON.stringify(request.query)}`,
@@ -50,7 +49,6 @@ module.exports = {
     });
   },
 
-  // category
   getCategoryRedis: (request, response, next) => {
     client.get("getcategory", (error, result) => {
       if (!error && result !== null) {
@@ -92,7 +90,6 @@ module.exports = {
     });
   },
 
-  // history orders
   getHistoryRedis: (request, response, next) => {
     client.get(
       `gethistory:${JSON.stringify(request.query)}`,

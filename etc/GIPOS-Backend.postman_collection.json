@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "64e23818-2604-46cf-b35b-5c5a95f8a704",
-		"name": "Pos-Backend",
+		"name": "GIPOS-Backend",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -73,17 +73,18 @@
 								},
 								{
 									"key": "product_name",
-									"value": "Wiener Schnitzel",
+									"value": "Onion Ring 2",
 									"type": "text"
 								},
 								{
 									"key": "product_image",
+									"description": "max 1mb type jpg, png, jpeg",
 									"type": "file",
-									"src": "/home/galuh/Pictures/product/wiener.png"
+									"src": "/C:/Users/Galuh Prahadi/Pictures/product/pisanggoreng.jpg"
 								},
 								{
 									"key": "product_price",
-									"value": "69000",
+									"value": "6000",
 									"type": "text"
 								},
 								{
@@ -119,7 +120,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3001/product/24",
+							"raw": "http://127.0.0.1:3001/product/39",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -130,7 +131,7 @@
 							"port": "3001",
 							"path": [
 								"product",
-								"24"
+								"39"
 							]
 						}
 					},
@@ -151,31 +152,31 @@
 								},
 								{
 									"key": "product_name",
-									"value": "gedang",
+									"value": "Onion Ring",
 									"type": "text"
 								},
 								{
 									"key": "product_image",
 									"type": "file",
-									"src": "/media/galuh/Data/Responsive-.png"
+									"src": "/C:/Users/Galuh Prahadi/Pictures/product/onionring.jpg"
 								},
 								{
 									"key": "product_price",
-									"value": "11111",
+									"value": "3000",
 									"type": "text"
 								},
 								{
 									"key": "status",
-									"value": "0",
+									"value": "1",
 									"type": "text"
 								}
 							],
 							"options": {
-								"urlencoded": {}
+								"formdata": {}
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:3001/product/24",
+							"raw": "http://127.0.0.1:3001/product/40",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -186,7 +187,7 @@
 							"port": "3001",
 							"path": [
 								"product",
-								"24"
+								"40"
 							]
 						}
 					},
@@ -257,7 +258,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VyX2VtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwidXNlcl9uYW1lIjoiYWRtaW4iLCJ1c2VyX3JvbGUiOjEsInVzZXJfc3RhdHVzIjoxLCJpYXQiOjE1OTkzOTc3MTEsImV4cCI6MTU5OTQ4NDExMX0.ELTaLkBgq8zAwXSM3OPuxF-0Wm9IFTgDDkX78LlVahg",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VyX2VtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwidXNlcl9uYW1lIjoiYWRtaW4iLCJ1c2VyX3JvbGUiOjEsInVzZXJfc3RhdHVzIjoxLCJpYXQiOjE1OTk0Njc1MTIsImV4cCI6MTU5OTU1MzkxMn0.pZ43kM1XqcJRkWb-c_OGUiKVKG41CCKDIp-8fHNgIoE",
 						"type": "string"
 					}
 				]
@@ -698,12 +699,12 @@
 							"urlencoded": [
 								{
 									"key": "user_email",
-									"value": "user@gmail.com",
+									"value": "admin@gmail.com",
 									"type": "text"
 								},
 								{
 									"key": "user_password",
-									"value": "user1234",
+									"value": "admin1234",
 									"type": "text"
 								}
 							],
@@ -739,17 +740,18 @@
 							"urlencoded": [
 								{
 									"key": "user_name",
-									"value": "user",
+									"value": "chasier",
 									"type": "text"
 								},
 								{
 									"key": "user_email",
-									"value": "user1@gmail.com",
+									"value": "chasier@gmail.com",
 									"type": "text"
 								},
 								{
 									"key": "user_password",
 									"value": "user1234",
+									"description": "min 8 dan harus ada 1 angka dan \n1 huruf",
 									"type": "text"
 								}
 							],
@@ -880,6 +882,29 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
+							"raw": "http://127.0.0.1:3001/users/6",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3001",
+							"path": [
+								"users",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "USER GET BY ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
 							"raw": "http://127.0.0.1:3001/users/5",
 							"protocol": "http",
 							"host": [
@@ -896,29 +921,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "USER GET BY ID",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:3001/users/4",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "3001",
-							"path": [
-								"users",
-								"4"
-							]
-						}
-					},
-					"response": []
 				}
 			],
 			"auth": {
@@ -926,7 +928,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VyX2VtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwidXNlcl9uYW1lIjoiYWRtaW4iLCJ1c2VyX3JvbGUiOjEsInVzZXJfc3RhdHVzIjoxLCJpYXQiOjE1OTkzOTc3MTEsImV4cCI6MTU5OTQ4NDExMX0.ELTaLkBgq8zAwXSM3OPuxF-0Wm9IFTgDDkX78LlVahg",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VyX2VtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwidXNlcl9uYW1lIjoiYWRtaW4iLCJ1c2VyX3JvbGUiOjEsInVzZXJfc3RhdHVzIjoxLCJpYXQiOjE1OTk0Njc1MTIsImV4cCI6MTU5OTU1MzkxMn0.pZ43kM1XqcJRkWb-c_OGUiKVKG41CCKDIp-8fHNgIoE",
 						"type": "string"
 					}
 				]

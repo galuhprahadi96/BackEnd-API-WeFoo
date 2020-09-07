@@ -11,15 +11,10 @@ const {
 const { authAdmin } = require("../middleware/Auth");
 
 router.post("/register", registerUser);
-router.get("/login", loginUser);
-
-// manag user
+router.post("/login", loginUser);
 router.get("/", authAdmin, getAllUser);
 router.get("/:id", authAdmin, getUserById);
-// PATCH
 router.patch("/:id", authAdmin, patchUser);
-
-// DELETE
 router.delete("/:id", authAdmin, deleteUser);
 
 module.exports = router;

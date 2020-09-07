@@ -1,4 +1,3 @@
-// import data model
 const {
   getHistoryById,
   getAllHistory,
@@ -11,13 +10,10 @@ const {
 const { getOrderById } = require("../model/order");
 
 const qs = require("querystring");
-// import helper
 const helper = require("../helper/index.js");
-// import redis
 const redis = require("redis");
 const client = redis.createClient();
 
-// logic prevlink pagination
 const getPrevLink = (page, currentQuery) => {
   if (page > 1) {
     const generatedPage = {
@@ -41,7 +37,7 @@ const getNextLink = (page, totalPage, currentQuery) => {
     return null;
   }
 };
-// end logic pagination
+
 module.exports = {
   getAllHistory: async (req, res) => {
     let { page, limit } = req.query;
@@ -85,7 +81,6 @@ module.exports = {
     }
   },
 
-  // count order week
   getHistoryOrder: async (req, res) => {
     try {
       const result = await countHistoryOrder();
@@ -98,14 +93,12 @@ module.exports = {
           totalOrders: 0,
         };
       }
-
       return helper.response(res, 200, "Success count orders", data);
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
     }
   },
 
-  //total order per tahun
   getTotalPrice: async (req, res) => {
     try {
       const result = await countTotalPriceOrder();
@@ -125,7 +118,6 @@ module.exports = {
     }
   },
 
-  //total order per tahun
   getTotalOrderDay: async (req, res) => {
     try {
       const result = await countTotalPrice();
@@ -163,7 +155,6 @@ module.exports = {
     }
   },
 
-  // ambil data
   getHistoryById: async (req, res) => {
     try {
       const id = req.params.id;

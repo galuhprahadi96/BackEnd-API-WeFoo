@@ -1,7 +1,6 @@
 const connection = require("../config/mysql");
 
 module.exports = {
-  // ambil data history
   getAllHistory: (limit, offset) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -13,7 +12,6 @@ module.exports = {
     });
   },
 
-  // ambil history by id
   getHistoryById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -26,7 +24,6 @@ module.exports = {
     });
   },
 
-  // hitung jumlah data
   countHistory: () => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -38,7 +35,6 @@ module.exports = {
     });
   },
 
-  // hitung total order per minggu
   countHistoryOrder: () => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -50,7 +46,6 @@ module.exports = {
     });
   },
 
-  // hitung total order per tahun
   countTotalPriceOrder: () => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -62,7 +57,6 @@ module.exports = {
     });
   },
 
-  // hitung total price hari ini
   countTotalPrice: () => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -85,7 +79,6 @@ module.exports = {
     });
   },
 
-  // method post history
   postHistory: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -106,7 +99,6 @@ module.exports = {
     });
   },
 
-  // update
   patchHistory: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
