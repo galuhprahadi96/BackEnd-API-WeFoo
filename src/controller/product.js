@@ -1,6 +1,7 @@
 const {
   getSearchProduct,
   getProduct,
+  getProductActive,
   getProductCount,
   getProductById,
   postProduct,

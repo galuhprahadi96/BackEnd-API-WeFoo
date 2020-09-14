@@ -51,6 +51,7 @@ module.exports = {
   },
 
   patchUser: (setData, id) => {
+    console.log(setData);
     return new Promise((resolve, reject) => {
       connection.query(
         "UPDATE users SET ? WHERE user_id = ?",

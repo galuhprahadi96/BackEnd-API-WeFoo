@@ -62,7 +62,6 @@ module.exports = {
     };
     try {
       const result = await getAllHistory(limitItem, offset);
-
       for (let i = 0; i < result.length; i++) {
         result[i].orders = await getOrderById(result[i].history_id);
       }

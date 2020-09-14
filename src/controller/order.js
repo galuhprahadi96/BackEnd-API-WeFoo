@@ -26,6 +26,7 @@ module.exports = {
     let subTotal = 0;
 
     dataInvoice = {
+      user_id: req.body.user_id,
       invoice: randomInvoice(),
     };
 

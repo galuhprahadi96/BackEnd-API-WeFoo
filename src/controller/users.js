@@ -139,36 +139,61 @@ module.exports = {
     try {
       const id = req.params.id;
 
-      const { user_name, user_email, user_password, user_status } = req.body;
+      const { user_name, user_email, user_role, user_status } = req.body;
 
       const checkId = await getUserById(id);
-
       if (checkId.length > 0) {
         if (
           user_name !== "" &&
           user_email !== "" &&
-          user_password !== "" &&
+          user_role !== "" &&
           user_status !== ""
         ) {
+          const setData = {
+            user_name,
+            user_email,
+            user_role,
+            user_status,
+            user_updated_at: new Date(),
+          };
+          const result = await patchUser(setData, id);
+          return helper.response(res, 201, "User Updated", result);
+        } else {
+          return helper.response(res, 201, `values has insert`);
+        }
+      } else {
+        return helper.response(res, 404, `User Id : ${id} Not Found`);
+      }
+    } catch (error) {
+      return helper.response(res, 400, "Bad Request", error);
+    }
+  },
+
+  changePassword: async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      const { user_password } = req.body;
+
+      const checkId = await getUserById(id);
+      if (checkId.length > 0) {
+        if (user_password !== "") {
           const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
           if (user_password.match(regex)) {
             const salt = bcrypt.genSaltSync(10);
             const encryptPassword = bcrypt.hashSync(user_password, salt);
 
             const setData = {
-              user_name,
-              user_email,
               user_password: encryptPassword,
-              user_status,
               user_updated_at: new Date(),
             };
 
             const result = await patchUser(setData, id);
-            return helper.response(res, 201, "User Updated", result);
+            return helper.response(res, 201, "Password change", result);
           } else {
             return helper.response(
               res,
-              400,
+              404,
               "Password At least 8 characters, at least one letter and one number"
             );
           }

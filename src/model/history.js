@@ -4,7 +4,7 @@ module.exports = {
   getAllHistory: (limit, offset) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM history ORDER BY history_created_at DESC LIMIT ${limit} OFFSET ${offset}`,
+        `SELECT history.history_id, history.invoice, history.subtotal, history.history_created_at,history.user_id , users.user_name FROM history LEFT JOIN users ON history.user_id=users.user_id ORDER BY history_created_at DESC LIMIT ${limit} OFFSET ${offset}`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error));
         }
