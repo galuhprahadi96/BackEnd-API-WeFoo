@@ -96,7 +96,11 @@ module.exports = {
                 return helper.response(response, 400, "Wrong Password");
               }
             } else {
-              return helper.response(response, 400, "user not Active");
+              return helper.response(
+                response,
+                400,
+                "user not active please contact admin"
+              );
             }
           } else {
             return helper.response(response, 400, "Email not Registered");
