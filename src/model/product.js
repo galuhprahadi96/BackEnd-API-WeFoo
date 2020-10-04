@@ -4,7 +4,7 @@ module.exports = {
   getProduct: (limit, offset, name, sort) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT product_id, category_name, product_name, product_image,product_price, status, product_created_at, product_update_at FROM product LEFT JOIN category ON product.id_category=category.category_id ORDER BY ${name} ${sort} LIMIT ${limit} OFFSET ${offset}`,
+        `SELECT product_id, category_name, product_name, product_image, product_price, status, product_created_at, product_update_at FROM product LEFT JOIN category ON product.id_category=category.category_id ORDER BY ${name} ${sort} LIMIT ${limit} OFFSET ${offset}`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error));
         }

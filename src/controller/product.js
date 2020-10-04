@@ -121,7 +121,7 @@ module.exports = {
         const result = await postProduct(setData);
         return helper.response(res, 201, "Product Created", result);
       } else {
-        return helper.response(res, 201, `values has insert`);
+        return helper.response(res, 400, `values has insert`);
       }
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
@@ -133,33 +133,44 @@ module.exports = {
       const id = req.params.id;
       const { id_category, product_name, product_price, status } = req.body;
 
-      const setData = {
-        id_category,
-        product_name,
-        product_image: req.file === undefined ? "" : req.file.filename,
-        product_price,
-        product_update_at: new Date(),
-        status,
-      };
       const checkId = await getProductById(id);
       if (checkId.length > 0) {
         if (
-          setData.id_category !== "" &&
-          setData.product_name !== "" &&
-          setData.product_image !== "" &&
-          setData.product_price !== "" &&
-          setData.status !== ""
+          id_category !== "" &&
+          product_name !== "" &&
+          product_price !== "" &&
+          status !== ""
         ) {
-          fs.unlink(`./uploads/${checkId[0].product_image}`, async (err) => {
-            if (err) {
-              throw err;
-            } else {
-              const result = await putProduct(setData, id);
-              return helper.response(res, 201, "Product Updated", result);
-            }
-          });
+          if (req.file === undefined || req.file === "") {
+            const Data = {
+              id_category,
+              product_name,
+              product_price,
+              product_update_at: new Date(),
+              status,
+            };
+            const result = await putProduct(Data, id);
+            return helper.response(res, 201, "Product Updated", result);
+          } else {
+            const setData = {
+              id_category,
+              product_name,
+              product_image: req.file.filename,
+              product_price,
+              product_update_at: new Date(),
+              status,
+            };
+            fs.unlink(`./uploads/${checkId[0].product_image}`, async (err) => {
+              if (err) {
+                throw err;
+              } else {
+                const result = await putProduct(setData, id);
+                return helper.response(res, 201, "Product Updated", result);
+              }
+            });
+          }
         } else {
-          return helper.response(res, 201, `values has insert`);
+          return helper.response(res, 400, `values has insert`);
         }
       } else {
         return helper.response(res, 404, `Product By Id : ${id} Not Found`);

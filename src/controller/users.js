@@ -163,7 +163,7 @@ module.exports = {
           const result = await patchUser(setData, id);
           return helper.response(res, 201, "User Updated", result);
         } else {
-          return helper.response(res, 201, `values has insert`);
+          return helper.response(res, 400, `values has insert`);
         }
       } else {
         return helper.response(res, 404, `User Id : ${id} Not Found`);
@@ -202,7 +202,7 @@ module.exports = {
             );
           }
         } else {
-          return helper.response(res, 201, `values has insert`);
+          return helper.response(res, 400, `values has insert`);
         }
       } else {
         return helper.response(res, 404, `User Id : ${id} Not Found`);

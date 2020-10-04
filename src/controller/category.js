@@ -47,7 +47,7 @@ module.exports = {
       };
 
       if (category_name === "") {
-        return helper.response(res, 201, `values has insert`);
+        return helper.response(res, 400, `values has insert`);
       } else {
         const result = await postCategory(setData);
         return helper.response(res, 201, "Category Created", result);
@@ -69,7 +69,7 @@ module.exports = {
       const checkId = await getCategoryById(id);
       if (checkId.length > 0) {
         if (category_name === "") {
-          return helper.response(res, 201, `values has insert`);
+          return helper.response(res, 400, `values has insert`);
         } else {
           const result = await patchCategory(setData, id);
           return helper.response(res, 201, "Category Updated", result);
