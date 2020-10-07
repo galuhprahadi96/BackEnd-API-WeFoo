@@ -8,15 +8,12 @@ const {
 } = require("../model/category");
 
 const helper = require("../helper/index.js");
-const redis = require("redis");
-const client = redis.createClient();
 
 module.exports = {
   getAllCategory: async (req, res) => {
     try {
       const result = await getAllCategory();
 
-      client.setex("getcategory", 3600, JSON.stringify(result));
       return helper.response(res, 200, "Success Get Category", result);
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
@@ -28,7 +25,6 @@ module.exports = {
       const id = req.params.id;
       const result = await getCategoryById(id);
       if (result.length > 0) {
-        client.setex(`getcategorybyid:${id}`, 3600, JSON.stringify(result));
         return helper.response(res, 200, "Success Get Category Id", result);
       } else {
         return helper.response(res, 404, `Category id = ${id} not Found`);

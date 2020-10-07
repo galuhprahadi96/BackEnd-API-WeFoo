@@ -10,13 +10,12 @@ const {
 } = require("../controller/history");
 
 const { authAll } = require("../middleware/Auth");
-const { getHistoryRedis, getHistoryIdRedis } = require("../middleware/Redis");
 
-route.get("/", authAll, getHistoryRedis, getAllHistory);
+route.get("/", authAll, getAllHistory);
 route.get("/count", authAll, getHistoryOrder);
 route.get("/total", authAll, getTotalPrice);
 route.get("/income", authAll, getTotalOrderDay);
 route.get("/chart", authAll, getHistoryChart);
-route.get("/:id", authAll, getHistoryIdRedis, getHistoryById);
+route.get("/:id", authAll, getHistoryById);
 
 module.exports = route;

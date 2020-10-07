@@ -12,8 +12,6 @@ const {
 const qs = require("querystring");
 const helper = require("../helper/index.js");
 const fs = require("fs");
-const redis = require("redis");
-const client = redis.createClient();
 
 const getPrevLink = (page, currentQuery) => {
   if (page > 1) {
@@ -65,16 +63,6 @@ module.exports = {
     try {
       const result = await getProduct(limitItem, offset, nameSort, sortBy);
 
-      let newData = {
-        result,
-        pageInfo,
-      };
-
-      client.set(
-        `getproduct:${JSON.stringify(req.query)}`,
-        JSON.stringify(newData)
-      );
-
       return helper.response(res, 200, `Success Get Product`, [
         result,
         pageInfo,
@@ -89,7 +77,6 @@ module.exports = {
       const id = req.params.id;
       const result = await getProductById(id);
       if (result.length > 0) {
-        client.setex(`getproductbyid:${id}`, 3600, JSON.stringify(result));
         return helper.response(res, 200, "Success Get Product By ID", result);
       } else {
         return helper.response(res, 404, `Product By Id : ${id} Not Found`);
@@ -102,26 +89,37 @@ module.exports = {
   postProduct: async (req, res) => {
     try {
       const { id_category, product_name, product_price, status } = req.body;
-      const setData = {
-        id_category,
-        product_name,
-        product_image: req.file === undefined ? "" : req.file.filename,
-        product_price,
-        product_created_at: new Date(),
-        status,
-      };
 
-      if (
-        setData.id_category !== "" &&
-        setData.product_name !== "" &&
-        setData.product_image !== "" &&
-        setData.product_price !== "" &&
-        setData.status !== ""
-      ) {
-        const result = await postProduct(setData);
-        return helper.response(res, 201, "Product Created", result);
+      if (product_name === "") {
+        return helper.response(res, 400, "input product name first", error);
+      } else if (product_price === "") {
+        return helper.response(res, 400, "input profuct price first", error);
+      } else if (id_category === "") {
+        return helper.response(res, 400, "Please select category", error);
       } else {
-        return helper.response(res, 400, `values has insert`);
+        if (req.file === undefined || req.file === "") {
+          const setData = {
+            id_category,
+            product_name,
+            product_image: "default.png",
+            product_price,
+            product_created_at: new Date(),
+            status,
+          };
+          const result = await postProduct(setData);
+          return helper.response(res, 201, "Product Created", result);
+        } else {
+          const setData = {
+            id_category,
+            product_name,
+            product_image: req.file === undefined ? "" : req.file.filename,
+            product_price,
+            product_created_at: new Date(),
+            status,
+          };
+          const result = await postProduct(setData);
+          return helper.response(res, 201, "Product Created", result);
+        }
       }
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
@@ -160,14 +158,22 @@ module.exports = {
               product_update_at: new Date(),
               status,
             };
-            fs.unlink(`./uploads/${checkId[0].product_image}`, async (err) => {
-              if (err) {
-                throw err;
-              } else {
-                const result = await putProduct(setData, id);
-                return helper.response(res, 201, "Product Updated", result);
-              }
-            });
+            if (checkId[0].product_image === "default.png") {
+              const result = await putProduct(setData, id);
+              return helper.response(res, 201, "Product Updated", result);
+            } else {
+              fs.unlink(
+                `./uploads/${checkId[0].product_image}`,
+                async (err) => {
+                  if (err) {
+                    throw err;
+                  } else {
+                    const result = await putProduct(setData, id);
+                    return helper.response(res, 201, "Product Updated", result);
+                  }
+                }
+              );
+            }
           }
         } else {
           return helper.response(res, 400, `values has insert`);
@@ -185,14 +191,19 @@ module.exports = {
       const id = req.params.id;
       const checkId = await getProductById(id);
       if (checkId.length > 0) {
-        fs.unlink(`./uploads/${checkId[0].product_image}`, async (err) => {
-          if (err) {
-            throw err;
-          } else {
-            const result = await deleteProduct(id);
-            return helper.response(res, 201, "Product Deleted", result);
-          }
-        });
+        if (checkId[0].product_image === "default.png") {
+          const result = await deleteProduct(id);
+          return helper.response(res, 201, "Product Deleted", result);
+        } else {
+          fs.unlink(`./uploads/${checkId[0].product_image}`, async (err) => {
+            if (err) {
+              throw err;
+            } else {
+              const result = await deleteProduct(id);
+              return helper.response(res, 201, "Product Deleted", result);
+            }
+          });
+        }
       } else {
         return helper.response(res, 404, `Product by id : ${id} not found`);
       }
@@ -206,19 +217,10 @@ module.exports = {
       const { keyword } = req.query;
 
       const result = await getSearchProduct(keyword);
-      let totalData = await getProductCount();
-      const searchInfo = {
-        Find: result.length,
-        "Total Data": totalData,
-      };
-
       if (result.length > 0) {
-        return helper.response(res, 200, `Data found ${searchInfo.Find}`, [
-          result,
-          searchInfo,
-        ]);
+        return helper.response(res, 200, `Data found`, result);
       } else {
-        return helper.response(res, 404, `Product ${keyword} not found`);
+        return helper.response(res, 400, `Product ${keyword} not found`);
       }
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);

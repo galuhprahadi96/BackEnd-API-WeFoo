@@ -9,16 +9,11 @@ const {
 } = require("../controller/category");
 
 const { authAll, authAdmin } = require("../middleware/Auth");
-const {
-  clearDataCategoryRedis,
-  getCategoryRedis,
-  getCategoryByIdRedis,
-} = require("../middleware/Redis");
 
-route.get("/", authAll, getCategoryRedis, getAllCategory);
-route.get("/:id", authAll, getCategoryByIdRedis, getCategoryById);
-route.post("/", authAdmin, clearDataCategoryRedis, postCategory);
-route.patch("/:id", authAdmin, clearDataCategoryRedis, patchCategory);
-route.delete("/:id", authAdmin, clearDataCategoryRedis, deleteCategory);
+route.get("/", authAll, getAllCategory);
+route.get("/:id", authAll, getCategoryById);
+route.post("/", authAdmin, postCategory);
+route.patch("/:id", authAdmin, patchCategory);
+route.delete("/:id", authAdmin, deleteCategory);
 
 module.exports = route;

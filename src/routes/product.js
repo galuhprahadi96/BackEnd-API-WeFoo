@@ -10,17 +10,12 @@ const {
 
 const { authAll, authAdmin } = require("../middleware/Auth");
 const uploadFilter = require("../middleware/Multer");
-const {
-  clearDataProductRedis,
-  getProductRedis,
-  getProductByIdRedis,
-} = require("../middleware/Redis");
 
 route.get("/search", authAll, getSearchProduct);
-route.get("/", authAll, getProductRedis, getAllProduct);
-route.get("/:id", authAll, getProductByIdRedis, getProductById);
-route.post("/", authAdmin, clearDataProductRedis, uploadFilter, postProduct);
-route.put("/:id", authAdmin, clearDataProductRedis, uploadFilter, putProduct);
-route.delete("/:id", authAdmin, clearDataProductRedis, deleteProduct);
+route.get("/", authAll,  getAllProduct);
+route.get("/:id", authAll,  getProductById);
+route.post("/", authAdmin,  uploadFilter, postProduct);
+route.put("/:id", authAdmin,  uploadFilter, putProduct);
+route.delete("/:id", authAdmin,  deleteProduct);
 
 module.exports = route;

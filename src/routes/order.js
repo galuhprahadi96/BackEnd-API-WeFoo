@@ -1,8 +1,7 @@
 const route = require("express").Router();
 const { postOrder } = require("../controller/order");
 const { authAll } = require("../middleware/Auth");
-const { clearDataHistoryRedis } = require("../middleware/Redis");
 
-route.post("/", authAll, clearDataHistoryRedis, postOrder);
+route.post("/", authAll, postOrder);
 
 module.exports = route;

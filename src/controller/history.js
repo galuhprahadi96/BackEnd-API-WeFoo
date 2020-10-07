@@ -11,8 +11,6 @@ const { getOrderById } = require("../model/order");
 
 const qs = require("querystring");
 const helper = require("../helper/index.js");
-const redis = require("redis");
-const client = redis.createClient();
 
 const getPrevLink = (page, currentQuery) => {
   if (page > 1) {
@@ -66,14 +64,6 @@ module.exports = {
         result[i].orders = await getOrderById(result[i].history_id);
       }
 
-      let newData = {
-        result,
-        pageInfo,
-      };
-      client.set(
-        `gethistory:${JSON.stringify(req.query)}`,
-        JSON.stringify(newData)
-      );
       return helper.response(res, 200, "Success Get history", result, pageInfo);
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
@@ -160,7 +150,6 @@ module.exports = {
       const history = await getHistoryById(id);
       const orders = await getOrderById(id);
       const result = [{ ...history[0], orders }];
-      client.setex(`gethistorybyid:${id}`, 3600, JSON.stringify(result));
       return helper.response(res, 200, `Success Get history id ${id}`, result);
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
