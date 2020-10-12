@@ -104,7 +104,7 @@ module.exports = {
             product_image: "default.png",
             product_price,
             product_created_at: new Date(),
-            status,
+            status: 1
           };
           const result = await postProduct(setData);
           return helper.response(res, 201, "Product Created", result);
@@ -115,7 +115,7 @@ module.exports = {
             product_image: req.file === undefined ? "" : req.file.filename,
             product_price,
             product_created_at: new Date(),
-            status,
+            status: 1
           };
           const result = await postProduct(setData);
           return helper.response(res, 201, "Product Created", result);
