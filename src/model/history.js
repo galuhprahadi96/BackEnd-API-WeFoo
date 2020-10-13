@@ -85,6 +85,8 @@ module.exports = {
         "INSERT INTO history SET ?",
         setData,
         (error, result) => {
+          console.log(result)
+          console.log(error)
           if (!error) {
             const newResult = {
               history_id: result.insertId,
@@ -106,6 +108,8 @@ module.exports = {
         [setData, id],
         (error, result) => {
           if (!error) {
+            console.log(result)
+            console.log(error)
             const newResult = {
               history_id: id,
               ...setData,

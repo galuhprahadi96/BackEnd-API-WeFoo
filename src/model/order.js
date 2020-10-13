@@ -6,6 +6,8 @@ module.exports = {
       connection.query(
         `SELECT product_price FROM product WHERE product_id = ${id}`,
         (error, result) => {
+          console.log(result)
+          console.log(error)
           let newResult = JSON.parse(JSON.stringify(result));
           !error ? resolve(newResult) : reject(new Error(error));
         }
@@ -19,6 +21,8 @@ module.exports = {
         "SELECT history_id, product_name, order_qty, order_total FROM order_product LEFT JOIN product ON order_product.product_id=product.product_id WHERE history_id = ?",
         id,
         (error, result) => {
+          console.log(result)
+          console.log(error)
           !error ? resolve(result) : reject(new Error(error));
         }
       );
@@ -32,6 +36,8 @@ module.exports = {
         setData,
         (error, result) => {
           if (!error) {
+            console.log(result)
+            console.log(error)
             const newResult = {
               id_order: result.insertId,
             };
