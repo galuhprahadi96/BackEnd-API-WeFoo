@@ -31,7 +31,7 @@ module.exports = {
                 user_email,
                 user_password: encryptPassword,
                 user_role: 2,
-                user_status: 0,
+                user_status: 1,
                 user_created_at: new Date(),
               };
 
