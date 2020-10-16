@@ -24,7 +24,8 @@ Gi Pos is a point of sales application for cafe and food outlets.
 5. Create a database with the name gi-pos, and Import file sql to **phpmyadmin**
 6. Open Postman desktop application or Chrome web app extension that has installed before
 7. Choose HTTP Method and enter request url.(ex. localhost:3001/)
-8. You can see all the end point [here](#end-point)
+8. You can see all the end point [here](https://documenter.getpostman.com/view/8990216/TVRrU4C4
+)
 
 ## Set up .env file
 
