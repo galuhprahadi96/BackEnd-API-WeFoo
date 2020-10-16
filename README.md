@@ -107,5 +107,6 @@ PORT=3001
 
 - `/users/:id` (Delete User by id)
 
+## Postman link
 
-[POSTMAN LINK](https://web.postman.co/collections/8990216-64e23818-2604-46cf-b35b-5c5a95f8a704?version=latest&workspace=9494c810-5d02-4bd7-8044-970fbebaa464)
+Link: https://documenter.getpostman.com/view/8990216/TVRrU4C4
