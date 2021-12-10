@@ -4,7 +4,7 @@ module.exports = {
   getAllCategory: () => {
     return new Promise((resolve, reject) => {
       connection.query("SELECT * FROM category", (error, result) => {
-        !error ? resolve(result) : reject(new Error(error));
+        !error ? resolve(result.rows) : reject(new Error(error));
       });
     });
   },
@@ -12,10 +12,10 @@ module.exports = {
   getCategoryById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        "SELECT * FROM category WHERE category_id = ?",
-        id,
+        "SELECT * FROM category WHERE category_id = $1",
+        [id],
         (error, result) => {
-          !error ? resolve(result) : reject(new Error(error));
+          !error ? resolve(result.rows) : reject(new Error(error));
         }
       );
     });
@@ -24,15 +24,10 @@ module.exports = {
   postCategory: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        "INSERT INTO category SET ?",
-        setData,
+        "INSERT INTO category (category_name, category_created_at) VALUES ($1, $2)", [setData.category_name, setData.category_created_at],
         (error, result) => {
           if (!error) {
-            const newResult = {
-              category_id: result.insertId,
-              ...setData,
-            };
-            resolve(newResult);
+            resolve(setData);
           } else {
             reject(new Error(error));
           }
@@ -44,8 +39,8 @@ module.exports = {
   patchCategory: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        "UPDATE category SET ? WHERE category_id = ?",
-        [setData, id],
+        "UPDATE category SET category_name = $1, category_update_at = $2 WHERE category_id = $3",
+        [setData.category_name, setData.category_update_at, id],
         (error, result) => {
           if (!error) {
             const newResult = {
@@ -64,8 +59,8 @@ module.exports = {
   deleteCategory: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        "DELETE FROM category WHERE category_id = ?",
-        id,
+        "DELETE FROM category WHERE category_id = $1",
+        [id],
         (error, result) => {
           if (!error) {
             const newResult = {

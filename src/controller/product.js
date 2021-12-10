@@ -143,6 +143,7 @@ module.exports = {
             const Data = {
               id_category,
               product_name,
+              product_image: checkId[0].product_image,
               product_price,
               product_update_at: new Date(),
               status,

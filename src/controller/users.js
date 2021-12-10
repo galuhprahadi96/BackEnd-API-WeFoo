@@ -8,6 +8,7 @@ const {
   getUserById,
   patchUser,
   deleteUser,
+  patchPasswordUser,
 } = require("../model/users");
 const { JsonWebTokenError } = require("jsonwebtoken");
 
@@ -192,7 +193,7 @@ module.exports = {
               user_updated_at: new Date(),
             };
 
-            const result = await patchUser(setData, id);
+            const result = await patchPasswordUser(setData, id);
             return helper.response(res, 201, "Password change", result);
           } else {
             return helper.response(

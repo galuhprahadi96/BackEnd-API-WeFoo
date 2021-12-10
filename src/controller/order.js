@@ -1,4 +1,4 @@
-const { postHistory, patchHistory } = require("../model/history");
+const { postHistory, patchHistory, getHistoryById, getHistoryByInvoice } = require("../model/history");
 const { postOrder, getOrderById, getHarga } = require("../model/order");
 
 const helper = require("../helper/index.js");
@@ -30,32 +30,40 @@ module.exports = {
 
     try {
       const invoiceResult = await postHistory(dataInvoice);
+      const res = await getHistoryByInvoice(invoiceResult.invoice);
+
       for (let i = 0; i < orders.length; i++) {
         let resultPrice = await getHarga(orders[i].product_id);
         let { product_price } = resultPrice[0];
         let orderTotal = product_price * orders[i].qty;
         subTotal += orderTotal;
         dataOrder = {
-          history_id: invoiceResult.history_id,
+          history_id: res.history_id,
           product_id: orders[i].product_id,
           order_qty: orders[i].qty,
           order_total: orderTotal,
         };
+
         await postOrder(dataOrder);
       }
       const setData = {
         subtotal: ppn(subTotal),
         history_created_at: new Date(),
       };
-      let history = await patchHistory(setData, dataOrder.history_id);
-      let product = await getOrderById(invoiceResult.history_id);
+
+      let history = await patchHistory(setData, res.history_id);
+
+      let product = await getOrderById(res.history_id);
+
       const result = {
-        history_id: history.history_id,
+        history_id: res.history_id,
         invoice: invoiceResult.invoice,
         subtotal: setData.subtotal,
         created_at: setData.history_created_at,
         orders: product,
       };
+
+
       return helper.response(res, 200, "Order success", result);
     } catch (error) {
       return helper.response(res, 400, "Bad Request", error);
