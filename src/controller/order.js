@@ -30,7 +30,7 @@ module.exports = {
 
     try {
       const invoiceResult = await postHistory(dataInvoice);
-      const res = await getHistoryByInvoice(invoiceResult.invoice);
+      const invoi = await getHistoryByInvoice(invoiceResult.invoice);
 
       for (let i = 0; i < orders.length; i++) {
         let resultPrice = await getHarga(orders[i].product_id);
@@ -38,7 +38,7 @@ module.exports = {
         let orderTotal = product_price * orders[i].qty;
         subTotal += orderTotal;
         dataOrder = {
-          history_id: res.history_id,
+          history_id: invoi.history_id,
           product_id: orders[i].product_id,
           order_qty: orders[i].qty,
           order_total: orderTotal,
@@ -51,18 +51,19 @@ module.exports = {
         history_created_at: new Date(),
       };
 
-      let history = await patchHistory(setData, res.history_id);
 
-      let product = await getOrderById(res.history_id);
+      let history = await patchHistory(setData, invoi.history_id);
+
+      let product = await getOrderById(invoi.history_id);
+
 
       const result = {
-        history_id: res.history_id,
+        history_id: invoi.history_id,
         invoice: invoiceResult.invoice,
         subtotal: setData.subtotal,
         created_at: setData.history_created_at,
         orders: product,
       };
-
 
       return helper.response(res, 200, "Order success", result);
     } catch (error) {
