@@ -14,7 +14,9 @@ app.use(morgan("dev"));
 app.use(express.static("uploads"));
 
 app.use((request, response, next) => {
+response.header("Access-Control-Allow-Origin", 'gi-pos.netlify.app');
 response.header("Access-Control-Allow-Origin", "*");
+response.header("Access-Control-Allow-Methods", 'GET,PUT,PATCH,POST,DELETE');
 response.header(
 "Access-Control-Allow-Headers",
     "Origin, X-Request-With, Content-Type, Accept, Authorization"
