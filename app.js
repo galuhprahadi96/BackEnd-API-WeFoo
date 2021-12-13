@@ -28,8 +28,8 @@ app.get("*", (request, response) => {
   response.status(404).send("Path Not Found !");
 });
 
-app.listen(127.0.0.1, 3001, () => {
+app.listen(process.env.PORT, process.env.IP_ADDRESS, () => {
   console.log(
-    `Express app is listening on host: 127.0.0.1 and port: 3001`
+    `Express app is listening on host: ${process.env.IP_ADDRESS} and port: ${process.env.PORT}`
   );
 });
