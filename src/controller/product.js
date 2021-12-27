@@ -159,22 +159,22 @@ module.exports = {
               product_update_at: new Date(),
               status,
             };
-            if (checkId[0].product_image === "default.png") {
-              const result = await putProduct(setData, id);
-              return helper.response(res, 201, "Product Updated", result);
-            } else {
-              fs.unlink(
-                `./uploads/${checkId[0].product_image}`,
-                async (err) => {
-                  if (err) {
-                    throw err;
-                  } else {
-                    const result = await putProduct(setData, id);
-                    return helper.response(res, 201, "Product Updated", result);
-                  }
-                }
-              );
-            }
+            // if (checkId[0].product_image === "default.png") {
+            const result = await putProduct(setData, id);
+            return helper.response(res, 201, "Product Updated", result);
+            // } else {
+            //   fs.unlink(
+            //     `./uploads/${checkId[0].product_image}`,
+            //     async (err) => {
+            //       if (err) {
+            //         throw err;
+            //       } else {
+            //         const result = await putProduct(setData, id);
+            //         return helper.response(res, 201, "Product Updated", result);
+            //       }
+            //     }
+            //   );
+            // }
           }
         } else {
           return helper.response(res, 400, `values has insert`);
@@ -192,19 +192,19 @@ module.exports = {
       const id = req.params.id;
       const checkId = await getProductById(id);
       if (checkId.length > 0) {
-        if (checkId[0].product_image === "default.png") {
-          const result = await deleteProduct(id);
-          return helper.response(res, 201, "Product Deleted", result);
-        } else {
-          fs.unlink(`./uploads/${checkId[0].product_image}`, async (err) => {
-            if (err) {
-              throw err;
-            } else {
-              const result = await deleteProduct(id);
-              return helper.response(res, 201, "Product Deleted", result);
-            }
-          });
-        }
+        // if (checkId[0].product_image === "default.png") {
+        const result = await deleteProduct(id);
+        return helper.response(res, 201, "Product Deleted", result);
+        // } else {
+        //   fs.unlink(`./uploads/${checkId[0].product_image}`, async (err) => {
+        //     if (err) {
+        //       throw err;
+        //     } else {
+        //       const result = await deleteProduct(id);
+        //       return helper.response(res, 201, "Product Deleted", result);
+        //     }
+        //   });
+        // }
       } else {
         return helper.response(res, 404, `Product by id : ${id} not found`);
       }

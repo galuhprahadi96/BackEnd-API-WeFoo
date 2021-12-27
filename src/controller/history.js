@@ -90,7 +90,7 @@ module.exports = {
 
   getTotalPrice: async (req, res) => {
     try {
-      const { totalprice } = await countTotalPriceOrder();
+      const totalprice = await countTotalPriceOrder();
       if (totalprice > 0) {
         data = {
           incomeYear: totalprice,
@@ -110,7 +110,7 @@ module.exports = {
 
   getTotalOrderDay: async (req, res) => {
     try {
-      const { priceorders } = await countTotalPrice();
+      const priceorders = await countTotalPrice();
       if (priceorders > 0) {
         data = {
           incomeDay: priceorders,
