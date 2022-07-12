@@ -112,7 +112,7 @@ module.exports = {
   patchHistory: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `UPDATE history SET ? WHERE ?`,
+        `UPDATE history SET ? WHERE history_id = ?`,
         [setData, id],
         (error, result) => {
           if (!error) {

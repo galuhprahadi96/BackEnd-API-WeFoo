@@ -49,7 +49,7 @@ module.exports = {
   patchUser: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        "UPDATE users SET ?", [setData, id],
+        "UPDATE users SET ? WHERE user_id = ?", [setData, id],
         (error, result) => {
           if (!error) {
             const newResult = {
@@ -68,7 +68,7 @@ module.exports = {
   patchPasswordUser: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        "UPDATE users SET ?", [setData, id],
+        "UPDATE users SET ? WHERE user_id = ?", [setData, id],
         (error, result) => {
           if (!error) {
             const newResult = {
